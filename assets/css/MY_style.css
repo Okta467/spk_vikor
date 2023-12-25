@@ -1,0 +1,4 @@
+/* Fix Sweet Alert 2 size */
+.swal2-popup {
+	font-size: 1.6rem !important;
+}
