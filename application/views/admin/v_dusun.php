@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title><?= "Data User - {$this->config->config["webTitle"]}" ?></title>
+  <title><?= "Data Dusun - {$this->config->config["webTitle"]}" ?></title>
 
   <?php $this->load->view('admin/_partials/head') ?>
 </head>
@@ -31,7 +31,7 @@
             <div class="title_left">
               <ul class="breadcrumb">
                 <li><i class="fa fa-home"></i> <a href="">Home</a></li>
-                <li><a href="#">Data Users</a></li>
+                <li><a href="#">Data Dusun</a></li>
               </ul>
             </div>
             <div class="title_right">
@@ -52,7 +52,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
                 <div class="x_title">
-                  <h2><i class="fa fa-users"></i> Data Users</h2>
+                  <h2><i class="fa fa-building"></i> Data Dusun</h2>
                   <ul class="nav navbar-right panel_toolbox">
                     <button class="btn btn-primary btn-sm toggle_modal_tambah"><i class="fa fa-plus"></i> Tambah Data</button>
                   </ul>
@@ -60,17 +60,13 @@
                 </div>
                 <div class="x_content">
 
-                  <p class="text-muted font-13 m-b-30">Hanya hak akses <b>Kepala Dusun</b> dan <b>Ketua RT</b> yang memiliki dusun dan RT.</p>
-
                   <table class="table table-striped table-bordered jambo_table datatables">
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Dusun</th>
-                        <th>RT</th>
-                        <th>Nama Pemilik</th>
-                        <th>Username</th>
-                        <th>Hak Akses</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>Daftar RT</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -78,37 +74,27 @@
 
                       <?php
                       $no = 1;
-                      foreach ($users->result() as $user) :
+                      foreach ($dusuns->result() as $dusun) :
                       ?>
 
                         <tr>
                           <td><?= $no++ ?></td>
-                          <td><?= $user->dusun ?? '-' ?></td>
-                          <td><?= $user->rt ?? '-' ?></td>
-                          <td><?= $user->nama_pemilik ?></td>
-                          <td><?= $user->username ?></td>
+                          <td><?= $dusun->nama ?></td>
+                          <td><?= $dusun->alamat ?></td>
                           <td>
-                            <?php
-                            if ($user->hak_akses === 'admin') :
-                              echo '<span class="badge alert-danger">' . $user->hak_akses . '</span>';
-                            elseif (in_array($user->hak_akses, ['kepala_desa', 'sekretaris_desa', 'bendahara_desa', 'kasi_kesejahteraan_sosial'])) :
-                              echo '<span class="badge">' . $user->hak_akses . '</span>';
-                            elseif (in_array($user->hak_akses, ['kepala_dusun', 'ketua_rt'], $user->hak_akses)) :
-                              echo '<span class="badge alert-info">' . $user->hak_akses . '</span>';
-                            else :
-                              echo $user->hak_akses;
-                            endif;
-                            ?>
+                            <button class="btn btn-dark btn-sm toggle_modal_daftar_rt" data-dusun_id="<?= $dusun->id ?>">
+                              <i class="fa fa-list"></i> Detail
+                            </button>
                           </td>
                           <td>
                             <div class="form-button-action">
                               <!-- Toggle Modal Hapus -->
-                              <span class="toggle_swal_hapus" data-user_id="<?= $user->user_id ?>">
+                              <span class="toggle_swal_hapus" data-dusun_id="<?= $dusun->id ?>">
                                 <button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fa fa-times"></i></button>
                               </span>
 
                               <!-- Toggle Modal Edit -->
-                              <span class="toggle_modal_edit" data-user_id="<?= $user->user_id ?>">
+                              <span class="toggle_modal_edit" data-dusun_id="<?= $dusun->id ?>">
                                 <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></button>
                               </span>
                             </div>
@@ -140,6 +126,37 @@
   </div>
   <!--//END CONTAINER -->
 
+  <!--============================== MODAL DAFTAR RT ==============================-->
+  <div class="modal fade" id="modal_daftar_rt" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel2"><i class="fa fa-list"></i> Daftar RT</h4>
+        </div>
+        <div class="modal-body">
+
+          <h4 id="modal_daftar_rt_title"></h4>
+
+          <table class="table table-striped table-bordered jambo_table" id="modal_daftar_rt_table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nomor RT</th>
+                <th>Alamat</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--//END DAFTAR RT -->
+
   <!--============================== MODAL TAMBAH/EDIT ==============================-->
   <div class="modal fade" id="modal_tambah_dan_edit" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -153,67 +170,23 @@
           <form method="post" class="form-horizontal form-label-left" id="xform_modal_tambah_dan_edit">
 
             <!-- For updating data -->
-            <input type="hidden" name="xuser_id" id="xuser_id">
+            <input type="hidden" name="xdusun_id" id="xdusun_id">
 
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xdusun_id">Dusun</label>
-              <select name="xdusun_id" id="xdusun_id" class="form-control select2">
-                <option value="">-- Pilih --</option>
-
-                <?php foreach ($dusuns->result() as $dusun) : ?>
-
-                  <option value="<?= $dusun->id ?>"><?= $dusun->nama ?></option>
-
-                <?php endforeach; ?>
-
-              </select>
-              <small class="text-danger">*) Kosongkan jika bukan <b>Kepala Desa</b> dan <b>Ketua RT</b>.</small>
-            </div>
-
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xrt_id">RT</label>
-              <select name="xrt_id" id="xrt_id" class="form-control select2">
-                <option value="">-- Pilih --</option>
-              </select>
-              <small class="text-danger">*) Pilih dusun terlebih dahulu.</small>
+            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+              <label for="xnama">Nama Dusun</label>
+              <input type="text" name="xnama" id="xnama" class="form-control" required="">
             </div>
 
             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-              <label for="xnama_pemilik">Nama Pemilik</label>
-              <input type="text" name="xnama_pemilik" id="xnama_pemilik" class="form-control" required>
+              <label for="xalamat">Alamat</label>
+              <textarea name="xalamat" class="form-control" id="xalamat" style="resize: vertical" rows="3"></textarea>
             </div>
 
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xusername">Username</label>
-              <input type="text" name="xusername" id="xusername" class="form-control" required>
-              <small>*) Hanya boleh huruf dan angka.</small>
-            </div>
-
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xpassword">Password</label>
-              <input type="password" name="xpassword" id="xpassword" class="form-control" autocomplete="new-password" required aria-autocomplete="list">
-              <small id="xpassword_help" class="hide">*) Kosongkan jika tidak ingin diubah.</small>
-            </div>
-
-            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-              <label for="xhak_akses">Hak Akses</label>
-              <select name="xhak_akses" id="xhak_akses" class="form-control select2" required>
-                <option value="">-- Pilih --</option>
-                <option value="admin">Admin</option>
-                <option value="kepala_desa">Kepala Desa</option>
-                <option value="sekretaris_desa">Sekretaris Desa</option>
-                <option value="bendahara_desa">Bendahara Desa</option>
-                <option value="kasi_kesejahteraan_sosial">Kasi Kesejahteraan Sosial</option>
-                <option value="kepala_dusun">kepala_dusun</option>
-                <option value="ketua_rt">ketua_rt</option>
-              </select>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-primary">Simpan</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
         </form>
         <!--/.form -->
       </div>
@@ -234,56 +207,75 @@
           [3, 5, 10, 25, 50, 100],
         ]
       });
+            
+      var datatableModalDaftarRt = $('#modal_daftar_rt_table').DataTable({
+        fixedHeader: true,
+        pageLength: 5,
+        lengthMenu: [
+          [3, 5, 10, 25, 50, 100],
+          [3, 5, 10, 25, 50, 100],
+        ]
+      });
 
       $('.select2').select2({
         width: '100%'
       });
 
 
+      $('.datatables').on('click', '.toggle_modal_daftar_rt', function () {
+        const dusun_id = $(this).data('dusun_id');
+
+        $.ajax({
+          url: '<?= site_url('admin/dusun/get_all_rt') ?>',
+          type: 'POST',
+          data: {
+            dusun_id
+          },
+          dataType: 'JSON',
+          success: function(data) {
+            $('#modal_daftar_rt_title').html(data.dusun);
+
+            // add datatables row
+            let i = 1;
+            let rowsData = [];
+
+            for (key in data) {
+              rowsData.push([i++, data[key]['rt'], data[key]['alamat_rt']]);
+            }
+
+            datatableModalDaftarRt.clear().draw();
+            datatableModalDaftarRt.rows.add(rowsData).draw();
+
+            $('#modal_daftar_rt').modal('show');            
+          }
+        })
+      });
+
+
       $('.toggle_modal_tambah').on('click', function() {
         $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-plus"></i> Tambah Data');
-        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/user/store') ?>');
-        $('#xpassword').attr('required', true);
-        $('#xpassword_help').addClass('hide');
+        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/dusun/store') ?>');
         $('#modal_tambah_dan_edit').modal('show');
       });
 
 
       $('.datatables').on('click', '.toggle_modal_edit', function() {
-        const user_id = $(this).data('user_id');
+        const dusun_id = $(this).data('dusun_id');
 
         $.ajax({
-          url: '<?= site_url('admin/user/get_user_by_id') ?>',
+          url: '<?= site_url('admin/dusun/get_dusun_by_id') ?>',
           type: 'POST',
           data: {
-            user_id
+            dusun_id
           },
           dataType: 'JSON',
           success: function(data) {
             $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Edit Data');
-            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/user/update') ?>');
-            
-            $('#xuser_id').val(data.user_id);
-            $('#xdusun_id').val(data.dusun_id).select().trigger('change');
-            $('#xrt_id').val(data.rt_id).trigger('change'); // idk why this doesn't work (chatGPT said ajax timing)
-            $('#xnama_pemilik').val(data.nama_pemilik);
-            $('#xusername').val(data.username);
-            $('#xhak_akses').val(data.hak_akses).select().trigger('change');
-            $('#xpassword').attr('required', false);
-            $('#xpassword_help').removeClass('hide');
+            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/dusun/update') ?>');
 
-            // I know this sometimes work, and not, but idk how to fix it
-            $.ajax({
-              url: '<?= site_url('admin/user/get_user_by_id') ?>',
-              type: 'POST',
-              data: {
-                user_id
-              },
-              dataType: 'JSON',
-              success: function(data) {
-                $('#xrt_id').val(data.rt_id).select().trigger('change');
-              }
-            });
+            $('#xdusun_id').val(data.id);
+            $('#xnama').val(data.nama);
+            $('#xalamat').val(data.alamat);
 
             $('#modal_tambah_dan_edit').modal('show');
           }
@@ -291,8 +283,8 @@
       });
 
 
-      $('.datatables').on('click', '.toggle_swal_hapus', function() {
-        const user_id = $(this).data('user_id')
+      $('.toggle_swal_hapus').on('click', function() {
+        const dusun_id = $(this).data('dusun_id')
 
         Swal.fire({
           title: "Hapus Data?",
@@ -310,7 +302,7 @@
               icon: "success"
             });
 
-            window.location = "<?= site_url('admin/user/destroy/') ?>" + user_id
+            window.location = "<?= site_url('admin/dusun/destroy/') ?>" + dusun_id
           }
         });
       });
@@ -339,17 +331,6 @@
           }
         });
       });
-
-
-      $('#xhak_akses').on('change', function() {
-        const hak_akses = $(this).val();
-
-        if (["kepala_dusun", "ketua_rt"].includes(hak_akses)) {
-          $('#xdusun_id, #xrt_id').attr('required', true);
-        } else {
-          $('#xdusun_id, #xrt_id').attr('required', false);
-        }
-      })
     })
   </script>
 

@@ -1,0 +1,19 @@
+1. pop up pada Penilaian Alternatif: "harap memilih tahun penilaian terlebih dahulu"
+2. Buat tag alert di atas card tabel
+   -- teks pada pop up (poin 1)
+   -- klik tombol edit nilai untuk melihat data yang sudah dinilai
+[X] 3. halaman penilaian default data diambil berdasarkan tahun sekarang
+4. Halaman hitung penilaian
+   -- pilih tahun terlebih dahulu, baru proses
+   -- pop up jika ada yang belum dinilai (konfirmasi hitung)
+5. Tambah CRUD kolom kode_alternatif untuk tbl_alternatif
+6. penilaian_alternatif
+   -- radio di modal penilaian, ambil kriteria dari alternatif, tahun penilaian tersebut
+   -- get kriteria where IN (semua kriteria dari alternatif tersebut)
+   -- jika tidak ada data, maka ambil kriteria aktif sekarang
+   -- sama untuk pemilihan tahun penilaian (pengecekan kriteria penilaian)
+
+
+// temp
+- set object key nilai_s and nilai_r for penilaian_alternatif_simple
+- this is to check vikor index for alternative ranking

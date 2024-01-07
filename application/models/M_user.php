@@ -10,22 +10,24 @@ class M_user extends CI_Model {
 	/**
 	 * Rules insert/update tbl_user
 	 * 
-	 * @param bool $username_is_unique set is_unique to feild xusername using tbl_user.username
 	 * @return array<validation_rules
 	 */
-	public function rules($username_is_unique = true) {
-		$username_is_unique = $username_is_unique ? '|is_unique[tbl_user.username]' : '';
+	public function rules($dusun_id_is_required = true, $rt_id_is_required = true, $password_is_required = true, $username_is_unique = true) {
+		$dusun_id_is_required = $dusun_id_is_required ? '|required' : '';
+		$rt_id_is_required    = $rt_id_is_required ? '|required' : '';
+		$password_is_required = $password_is_required ? '|required' : '';
+		$username_is_unique   = $username_is_unique ? '|is_unique[tbl_user.username]' : '';
 
 		return [
 			[
 				'field'  => 'xdusun_id',
 				'label'  => 'ID Dusun',
-				'rules'  => 'required|integer',
+				'rules'  => 'integer' . $dusun_id_is_required,
 			],
 			[
 				'field'  => 'xrt_id',
 				'label'  => 'ID RT',
-				'rules'  => 'required|integer',
+				'rules'  => 'integer' . $rt_id_is_required,
 			],
 			[
 				'field'  => 'xusername',
@@ -36,7 +38,7 @@ class M_user extends CI_Model {
 			[
 				'field' => 'xpassword',
 				'label' => 'Password',
-				'rules' => 'max_length[255]'
+				'rules' => 'max_length[255]' . $password_is_required,
 			],
 			[
 				'field' => 'xhak_akses',
@@ -76,7 +78,7 @@ class M_user extends CI_Model {
 	}
 
 	public function update($id, $data) {
-		return $this->db->update($this->_table, $data, array('id' => $id));
+		return $this->db->update ($this->_table, $data, array('id' => $id));
 	}
 
 	public function delete($id) {
@@ -84,7 +86,7 @@ class M_user extends CI_Model {
 	}
 
 	public function get_all() {
-		return $this->db->get($this->_table);
+		return $this->db->order_by('id', 'DESC')->get($this->_table);
 	}
 
 	public function get_by_id($id) {
@@ -92,7 +94,7 @@ class M_user extends CI_Model {
 	}
 
 	public function get_where($where) {
-		return $this->db->get_where($this->_table, $where);
+		return $this->db->order_by('id', 'DESC')->get_where($this->_table, $where);
 	}
 
 	public function get_join_all() {

@@ -3,8 +3,8 @@ class M_rt extends CI_Model {
 	private $_table = 'tbl_rt';
 
 	const SELECT_JOIN_ALL = '
-        a.id AS id_rt, a.nama AS rt, a.alamat AS alamat_rt, a.created_at AS created_at_rt, a.updated_at AS updated_at_rt,
-        b.id AS id_dusun, b.nama AS dusun, b.alamat AS alamat_dusun, b.created_at AS created_at_dusun, b.updated_at AS updated_at_dusun';
+        a.id AS rt_id, a.nama AS rt, a.alamat AS alamat_rt, a.created_at AS created_at_rt, a.updated_at AS updated_at_rt,
+        b.id AS dusun_id, b.nama AS dusun, b.alamat AS alamat_dusun, b.created_at AS created_at_dusun, b.updated_at AS updated_at_dusun';
 
 	/**
 	 * Rules insert/update tbl_rt
@@ -15,9 +15,11 @@ class M_rt extends CI_Model {
 		return [
 			[
 				'field'  => 'xnama',
-				'label'  => 'Nama Dusun',
-				'rules'  => 'required|max_length[255]|regex_match[/^[a-zA-Z0-9.,()\- ]*$/]',
-				'errors' => array('regex_match' => '{field} hanya boleh huruf, angka spasi dan simbol berikut .,()-')
+				'label'  => 'Nama RT',
+				'rules'  => 'required|max_length[32]|regex_match[/^[a-zA-Z0-9.,()\- ]*$/]',
+				'errors' => array(
+					'regex_match' => '{field} hanya boleh huruf, angka spasi dan simbol berikut .,()-',
+					'is_unique' => 'Nama RT tidak boleh sama dengan data lainnya!')
 			],
 			[
 				'field'  => 'xalamat',
@@ -57,7 +59,6 @@ class M_rt extends CI_Model {
 			->select(self::SELECT_JOIN_ALL)
 			->from('tbl_rt AS a')
 			->join('tbl_dusun AS b', 'a.dusun_id = b.id', 'LEFT')
-			->join('tbl_rt AS c', 'a.rt_id = c.id', 'LEFT')
 			->order_by('a.id', 'DESC')
 			->get();
 	}
@@ -67,7 +68,6 @@ class M_rt extends CI_Model {
 			->select(self::SELECT_JOIN_ALL)
 			->from('tbl_rt AS a')
 			->join('tbl_dusun AS b', 'a.dusun_id = b.id', 'LEFT')
-			->join('tbl_rt AS c', 'a.rt_id = c.id', 'LEFT')
             ->where($where)
 			->order_by('a.id', 'DESC')
             ->get();

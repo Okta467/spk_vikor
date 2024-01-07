@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title><?= "Data Alternatif - {$this->config->config["webTitle"]}" ?></title>
+  <title><?= "Data Sub Kriteria - {$this->config->config["webTitle"]}" ?></title>
 
   <?php $this->load->view('admin/_partials/head') ?>
 </head>
@@ -31,7 +31,7 @@
             <div class="title_left">
               <ul class="breadcrumb">
                 <li><i class="fa fa-home"></i> <a href="">Home</a></li>
-                <li><a href="#">Data Alternatif</a></li>
+                <li><a href="#">Data Sub Kriteria</a></li>
               </ul>
             </div>
             <div class="title_right">
@@ -52,7 +52,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
                 <div class="x_title">
-                  <h2><i class="fa fa-user-md"></i> Data Alternatif</h2>
+                  <h2><i class="fa fa-pencil-square-o"></i> Data Sub Kriteria</h2>
                   <ul class="nav navbar-right panel_toolbox">
                     <button class="btn btn-primary btn-sm toggle_modal_tambah"><i class="fa fa-plus"></i> Tambah Data</button>
                   </ul>
@@ -64,13 +64,12 @@
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Kode</th>
-                        <th>Dusun</th>
-                        <th>RT</th>
-                        <th>KK Kepala Keluarga</th>
-                        <th>NIK Kepala Keluarga</th>
-                        <th>Nama Kepala Keluarga</th>
-                        <th>Alamat</th>
+                        <th>Kode Sub</th>
+                        <th>Nama Sub</th>
+                        <th>Skor Sub</th>
+                        <th>Kode Kriteria</th>
+                        <th>Nama Kriteria</th>
+                        <th>Atribut Kriteria</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
@@ -78,27 +77,34 @@
 
                       <?php
                       $no = 1;
-                      foreach ($alternatifs->result() as $alternatif) :
+                      foreach ($sub_kriterias->result() as $sub_kriteria) :
                       ?>
 
                         <tr>
                           <td><?= $no++ ?></td>
-                          <td><?= $alternatif->kode_alternatif ?></td>
-                          <td><?= $alternatif->dusun ?></td>
-                          <td><?= $alternatif->rt ?></td>
-                          <td><?= $alternatif->kk_kepala_keluarga ?></td>
-                          <td><?= $alternatif->nik_kepala_keluarga ?></td>
-                          <td><?= $alternatif->nama_kepala_keluarga ?></td>
-                          <td><?= $alternatif->alamat_alternatif ?></td>
+                          <td><?= $sub_kriteria->kode_sub_kriteria ?></td>
+                          <td><?= $sub_kriteria->nama_sub_kriteria ?></td>
+                          <td><?= $sub_kriteria->skor_sub_kriteria ?></td>
+                          <td><?= $sub_kriteria->kode_kriteria ?></td>
+                          <td><?= $sub_kriteria->nama_kriteria ?></td>
+                          <td>
+                            <?php
+                            if ($sub_kriteria->atribut_kriteria === 'benefit') :
+                              echo '<span class="badge alert-success">' . strtoupper($sub_kriteria->atribut_kriteria) . '</span>';
+                            elseif ($sub_kriteria->atribut_kriteria === 'cost') :
+                              echo '<span class="badge alert-danger">' . strtoupper($sub_kriteria->atribut_kriteria) . '</span>';
+                            endif;
+                            ?>
+                          </td>
                           <td>
                             <div class="form-button-action">
                               <!-- Toggle Modal Hapus -->
-                              <span class="toggle_swal_hapus" data-alternatif_id="<?= $alternatif->alternatif_id ?>">
+                              <span class="toggle_swal_hapus" data-sub_kriteria_id="<?= $sub_kriteria->sub_kriteria_id ?>">
                                 <button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fa fa-times"></i></button>
                               </span>
 
                               <!-- Toggle Modal Edit -->
-                              <span class="toggle_modal_edit" data-alternatif_id="<?= $alternatif->alternatif_id ?>">
+                              <span class="toggle_modal_edit" data-sub_kriteria_id="<?= $sub_kriteria->sub_kriteria_id ?>">
                                 <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></button>
                               </span>
                             </div>
@@ -143,21 +149,16 @@
           <form method="post" class="form-horizontal form-label-left" id="xform_modal_tambah_dan_edit">
 
             <!-- For updating data -->
-            <input type="hidden" name="xalternatif_id" id="xalternatif_id">
-            
-            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-              <label for="xkode">Kode Alternatif</label>
-              <input type="text" name="xkode" id="xkode" class="form-control" placeholder="AXX" required>
-            </div>
+            <input type="hidden" name="xsub_kriteria_id" id="xsub_kriteria_id">
 
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xdusun_id">Dusun</label>
-              <select name="xdusun_id" id="xdusun_id" class="form-control select2">
+            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+              <label for="xkriteria_id">Kriteria</label>
+              <select name="xkriteria_id" id="xkriteria_id" class="form-control select2">
                 <option value="">-- Pilih --</option>
 
-                <?php foreach ($dusuns->result() as $dusun) : ?>
+                <?php foreach ($kriterias->result() as $kriteria) : ?>
 
-                  <option value="<?= $dusun->id ?>"><?= $dusun->nama ?></option>
+                  <option value="<?= $kriteria->id ?>"><?= strtoupper($kriteria->atribut) . ' - ' . strtoupper($kriteria->kode) . ' - ' . $kriteria->nama ?></option>
 
                 <?php endforeach; ?>
 
@@ -165,38 +166,25 @@
             </div>
 
             <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xrt_id">RT</label>
-              <select name="xrt_id" id="xrt_id" class="form-control select2">
-                <option value="">-- Pilih --</option>
-              </select>
-              <small class="text-danger">*) Pilih dusun terlebih dahulu.</small>
+              <label for="xkode">Kode</label>
+              <input type="text" name="xkode" id="xkode" class="form-control" placeholder="Contoh: C01SC01" required>
             </div>
 
             <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xkk_kepala_keluarga">KK Kepala Keluarga</label>
-              <input type="number" name="xkk_kepala_keluarga" id="xkk_kepala_keluarga" class="form-control" required>
-            </div>
-
-            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-              <label for="xnik_kepala_keluarga">NIK Kepala Keluarga</label>
-              <input type="number" name="xnik_kepala_keluarga" id="xnik_kepala_keluarga" class="form-control" required>
+              <label for="xnama">Nama</label>
+              <input type="text" name="xnama" id="xnama" class="form-control" required>
             </div>
 
             <div class="form-group col-md-12 col-sm-12 col-xs-12">
-              <label for="xnama_kepala_keluarga">Nama Kepala Keluarga</label>
-              <input type="text" name="xnama_kepala_keluarga" id="xnama_kepala_keluarga" class="form-control" required>
+              <label for="xskor">Skor</label>
+              <input type="number" name="xskor" min="0" max="10" id="xskor" class="form-control" placeholder="1 sampai 10" required>
             </div>
 
-            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-              <label for="xalamat_alternatif">Alamat</label>
-              <textarea name="xalamat_alternatif" class="form-control" id="xalamat_alternatif" style="resize: vertical" rows="3"></textarea>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-primary">Simpan</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="toggle_swal_submit">Simpan</button>
+        </div>
         </form>
         <!--/.form -->
       </div>
@@ -225,45 +213,30 @@
 
       $('.toggle_modal_tambah').on('click', function() {
         $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-plus"></i> Tambah Data');
-        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/alternatif/store') ?>');
+        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/sub_kriteria/store') ?>');
         $('#modal_tambah_dan_edit').modal('show');
       });
 
-  
+
       $('.datatables').on('click', '.toggle_modal_edit', function() {
-        const alternatif_id = $(this).data('alternatif_id');
+        const sub_kriteria_id = $(this).data('sub_kriteria_id');
 
         $.ajax({
-          url: '<?= site_url('admin/alternatif/get_alternatif_by_id') ?>',
+          url: '<?= site_url('admin/sub_kriteria/get_sub_kriteria_by_id') ?>',
           type: 'POST',
           data: {
-            alternatif_id
+            sub_kriteria_id
           },
           dataType: 'JSON',
           success: function(data) {
             $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Edit Data');
-            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/alternatif/update') ?>');
-            
-            $('#xalternatif_id').val(data.alternatif_id);
-            $('#xkode').val(data.kode_alternatif);
-            $('#xdusun_id').val(data.dusun_id).select().trigger('change');
-            $('#xkk_kepala_keluarga').val(data.kk_kepala_keluarga);
-            $('#xnik_kepala_keluarga').val(data.nik_kepala_keluarga);
-            $('#xnama_kepala_keluarga').val(data.nama_kepala_keluarga);
-            $('#xalamat_alternatif').val(data.alamat_alternatif);
+            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/sub_kriteria/update') ?>');
 
-            // I know this sometimes work, and not, but idk how to fix it
-            $.ajax({
-              url: '<?= site_url('admin/alternatif/get_alternatif_by_id') ?>',
-              type: 'POST',
-              data: {
-                alternatif_id
-              },
-              dataType: 'JSON',
-              success: function(data) {
-                $('#xrt_id').val(data.rt_id).select().trigger('change');
-              }
-            });
+            $('#xsub_kriteria_id').val(data.id);
+            $('#xkriteria_id').val(data.kriteria_id).select().trigger('change');
+            $('#xkode').val(data.kode);
+            $('#xnama').val(data.nama);
+            $('#xskor').val(data.skor);
 
             $('#modal_tambah_dan_edit').modal('show');
           }
@@ -272,7 +245,7 @@
 
 
       $('.datatables').on('click', '.toggle_swal_hapus', function() {
-        const alternatif_id = $(this).data('alternatif_id')
+        const sub_kriteria_id = $(this).data('sub_kriteria_id')
 
         Swal.fire({
           title: "Hapus Data?",
@@ -290,34 +263,41 @@
               icon: "success"
             });
 
-            window.location = "<?= site_url('admin/alternatif/destroy/') ?>" + alternatif_id
+            window.location = "<?= site_url('admin/sub_kriteria/destroy/') ?>" + sub_kriteria_id
           }
         });
       });
 
 
-      $('#xdusun_id').on('change', function() {
-        const dusun_id = $(this).val();
+      // Simpan penilaian confirmation sweetalert
+      $('#toggle_swal_submit').on('click', function(e) {
+        e.preventDefault();
+        var form = $(this).parents('.modal-content').find('form');
 
-        $.ajax({
-          url: '<?= site_url("admin/dusun/get_all_rt/") ?>' + dusun_id,
-          type: 'POST',
-          data: {
-            dusun_id: dusun_id
-          },
-          dataType: 'JSON',
-          success: function(data) {
-            // Clear option from current select
-            const empty_option = '<option value="">-- Pilih -- </option>';
-            $('#xrt_id').html(empty_option)
+        // Validate form before showing sweetalert
+        if (!form[0].checkValidity()) {
+          form[0].reportValidity();
+        } else {
+          Swal.fire({
+            title: "Konfirmasi Tindakan??",
+            text: "Harap perhatikan kembali input sebelum submit.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, konfirmasi!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Success!",
+                text: "Tindakan dikonfirmasi!",
+                icon: "success"
+              });
 
-            // Add new option from retrieved data
-            for (const key in data) {
-              var new_option = new Option(data[key].rt, data[key].rt_id, false, false);
-              $('#xrt_id').append(new_option);
+              form.submit();
             }
-          }
-        });
+          });
+        }
       });
     })
   </script>

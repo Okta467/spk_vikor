@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="<?= base_url('assets/images/icon.png') ?>" type="image/x-icon">
 
 <!-- Bootstrap -->
 <link href="<?= base_url("vendors/bootstrap/dist/css/bootstrap.min.css") ?>" rel="stylesheet">
@@ -14,6 +15,9 @@
 
 <!-- iCheck -->
 <link href="<?= base_url("vendors/iCheck/skins/flat/green.css") ?>" rel="stylesheet">
+
+<!-- Select2 -->
+<link href="<?= base_url("vendors/select2/dist/css/select2.min.css") ?>" rel="stylesheet">
 
 <!-- bootstrap-progressbar -->
 <link href="<?= base_url("vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css") ?>" rel="stylesheet">
@@ -30,6 +34,11 @@
 <link href="<?= base_url("vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css") ?>" rel="stylesheet">
 <link href="<?= base_url("vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css") ?>" rel="stylesheet">
 <link href="<?= base_url("vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css") ?>" rel="stylesheet">
+
+<!-- PNotify -->
+<link href="<?= base_url("vendors/pnotify/dist/pnotify.css") ?>" rel="stylesheet">
+<link href="<?= base_url("vendors/pnotify/dist/pnotify.buttons.css") ?>" rel="stylesheet">
+<link href="<?= base_url("vendors/pnotify/dist/pnotify.nonblock.css") ?>" rel="stylesheet">
 
 <!-- SweetAlert2 -->
 <link href="<?= base_url("vendors/MY_Vendor/sweetalert2/dist/sweetalert2.min.css") ?>" rel="stylesheet">

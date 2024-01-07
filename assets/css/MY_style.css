@@ -2,3 +2,15 @@
 .swal2-popup {
 	font-size: 1.6rem !important;
 }
+
+/* Fix datatable filter width inside modal (not applied on mobile) */
+@media (min-width: 992px) {
+	.modal .dataTables_filter {
+		width: unset !important;
+	}	
+}
+
+/* Fix datatable width not 100% when changing screen width */
+table.datatables {
+	width: 100% !important;
+}

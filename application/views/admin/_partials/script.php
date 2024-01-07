@@ -22,6 +22,9 @@
 <!-- iCheck -->
 <script src="<?= base_url("vendors/iCheck/icheck.min.js") ?>"></script>
 
+<!-- Select2 -->
+<script src="<?= base_url("vendors/select2/dist/js/select2.full.min.js") ?>"></script>
+
 <!-- DateJS -->
 <script src="<?= base_url("vendors/DateJS/build/date.js") ?>"></script>
 
@@ -49,8 +52,41 @@
 <script src="<?= base_url("vendors/pdfmake/build/pdfmake.min.js") ?>"></script>
 <script src="<?= base_url("vendors/pdfmake/build/vfs_fonts.js") ?>"></script>
 
+<!-- PNotify -->
+<script src="<?= base_url("vendors/pnotify/dist/pnotify.js") ?>"></script>
+<script src="<?= base_url("vendors/pnotify/dist/pnotify.buttons.js") ?>"></script>
+<script src="<?= base_url("vendors/pnotify/dist/pnotify.nonblock.js") ?>"></script>
+
 <!-- SweetAlert2 -->
 <script src="<?= base_url("vendors/MY_Vendor/sweetalert2/dist/sweetalert2.all.min.js") ?>"></script>
 
 <!-- Custom Theme Scripts -->
 <script src="<?= base_url("build/js/custom.min.js") ?>"></script>
+
+
+<!-- Toggle Fullscreen on Sidebar Button -->
+<script>
+  document.getElementById('toggle_fullscreen').addEventListener('click', function() {
+    toggle_fullscreen();
+  });
+
+  function toggle_fullscreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var exitFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+      // Enter fullscreen mode
+      if (requestFullScreen) {
+        requestFullScreen.call(docEl);
+      }
+    } else {
+      // Exit fullscreen mode
+      if (exitFullScreen) {
+        exitFullScreen.call(doc);
+      }
+    }
+  }
+</script>
