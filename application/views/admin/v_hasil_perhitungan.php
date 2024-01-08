@@ -624,7 +624,7 @@
           
           <!--============================== TOOLS ==============================-->
           <div class="row">
-            <div cla$tahun_penilaiand-12 col-sm-12 col-xs-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
                 <div class="x_title">
                   <h2><i class="fa fa-gear"></i> Tools Hasil Perhitungan</h2>
