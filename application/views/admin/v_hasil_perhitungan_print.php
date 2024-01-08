@@ -11,46 +11,19 @@
   <div class="">
     
     <!--============================== KOP ==============================-->
-    <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_content">
-    
-            <table style="width: 100%">
-              <tbody>
-                <tr>
-                  <td width="15%">&nbsp;</td>
-                  <td width="10%" rowspan="2" class="text-right">
-                    <img src="<?=base_url('assets/images/icon.png') ?>" width="100">
-                  </td>
-                  <td width="50%" class="text-center">
-                    <h2 style="font-weight: bold; line-height: 1.5;">
-                      <span style="font-size: 1.25em;">
-                        PEMERINTAH KABAUPATEN BANYUASIN <br>
-                        KECAMATAN SEMBAWA <br>
-                      </span>
-                      <span style="font-size: 1.5em;">
-                        DESA PULAU HARAPAN
-                      </span>
-                    </h2>
-                  </td>
-                  <td width="25%">&nbsp;</td>
-                </tr>
-                <tr>
-                  <td width="15%" colspan="2">&nbsp;</td>
-                  <td width="60%" class="text-center">Alamat: Dusun 2, RT-001, No-104, Desa Pulau Harapan, Betung, Palembang (30753)</td>
-                  <td width="25%">&nbsp;</td>
-                </tr>
-                <tr>
-                  <td width="15%">&nbsp;</td>
-                  <td width="60%" colspan="2" style="border-bottom: 5px groove black;">&nbsp;</td>
-                  <td width="25%">&nbsp;</td>
-                </tr>
-              </tbody>
-            </table>
-    
-          </div>
-        </div>
+    <div class="x_panel" style="display: flex; flex-direction: row; align-items: center; justify-content: center; border: none; border-bottom: 5px groove black; margin-bottom: 1.5em">
+      <img src="<?= base_url('assets/images/icon.png') ?>" style="height: 130px;margin-right: 1.5em;">
+      <div>
+        <h2 style="font-weight: bold;line-height: 1.5;text-align: center;">
+          <span style="font-size: 1.25em;">
+            PEMERINTAH KABAUPATEN BANYUASIN <br>
+            KECAMATAN SEMBAWA <br>
+          </span>
+          <span style="font-size: 1.5em;">
+            DESA PULAU HARAPAN
+          </span>
+        </h2>
+        <p>Alamat: Dusun 2, RT-001, No-104, Desa Pulau Harapan, Betung, Palembang (30753)</p>
       </div>
     </div>
     <!--//END KOP -->
