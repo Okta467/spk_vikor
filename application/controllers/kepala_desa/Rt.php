@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Rt extends CI_Controller {
-    const CURRENT_ACCESS_LEVEL = 'bendahara_desa';
+    const CURRENT_ACCESS_LEVEL = 'kepala_desa';
 
     public function __construct() {
         parent::__construct();
@@ -21,6 +21,6 @@ class Rt extends CI_Controller {
 		$data['dusuns'] = $this->m_dusun->get_all();
 		$data['rts']    = $this->m_rt->get_join_all();
 
-		$this->load->view('bendahara_desa/v_rt', $data);
+		$this->load->view('kepala_desa/v_rt', $data);
 	}
 } 
