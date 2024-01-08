@@ -25,12 +25,23 @@
       <div class="menu_section">
         <h3>General</h3>
         <ul class="nav side-menu">
+          <?php
+          // pemberian class spesifik karena terdapat GET
+          // (template tidak bisa membaca halaman saat ini untuk templating)
+          $is_penilaian_alternatif_selected = $this->uri->segment(2) === 'penilaian_alternatif' ? 'class="current-page"' : '';
+          $is_hasil_perhitungan_selected = $this->uri->segment(2) === 'hasil_perhitungan' ? 'class="current-page"' : '';
+          ?>
+
           <li><a href="<?= site_url('admin') ?>"><i class="fa fa-home"></i> Dashboard </a></li>
           <li><a href="<?= site_url('admin/alternatif') ?>"><i class="fa fa-user-md"></i> Data Alternatif </a></li>
           <li><a href="<?= site_url('admin/kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Kriteria </a></li>
           <li><a href="<?= site_url('admin/sub_kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Sub-Kriteria </a></li>
-          <li><a href="<?= site_url('admin/penilaian_alternatif') ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a></li>
-          <li><a href="<?= site_url('admin/hasil_perhitungan') ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a></li>
+          <li <?= $is_penilaian_alternatif_selected ?>>
+            <a href="<?= site_url('admin/penilaian_alternatif/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a>
+          </li>
+          <li <?= $is_hasil_perhitungan_selected ?>>
+            <a href="<?= site_url('admin/hasil_perhitungan/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a>
+          </li>
           <li><a href="<?= site_url('admin/dusun') ?>"><i class="fa fa-building-o"></i> Data Dusun </a></li>
           <li><a href="<?= site_url('admin/rt') ?>"><i class="fa fa-road"></i> Data RT </a></li>
           <li><a href="<?= site_url('admin/user') ?>"><i class="fa fa-user"></i> Data Users </a></li>

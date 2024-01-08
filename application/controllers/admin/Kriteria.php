@@ -105,4 +105,17 @@ class Kriteria extends CI_Controller {
 		$data        = $this->m_sub_kriteria->get_where(['kriteria_id' => $kriteria_id])->result_array();
 		echo json_encode($data);
 	}
+
+    public function set_status_aktif() {
+        $kriteria_id      = $this->input->post('kriteria_id', TRUE);
+        $current_kriteria = $this->m_kriteria->get_by_id($kriteria_id)->row();
+        
+        // update status_aktif menjadi aktif jika belum aktif, sebaliknya
+        $update_kriteria = !$current_kriteria->status_aktif
+            ? $this->m_kriteria->update($kriteria_id, ['status_aktif' => '1'])
+            : $this->m_kriteria->update($kriteria_id, ['status_aktif' => '0']);
+
+        // boolean, true jika berhasil update, sebaliknya
+        echo json_encode($update_kriteria);
+    }
 } 

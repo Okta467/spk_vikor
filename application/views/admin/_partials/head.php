@@ -19,6 +19,9 @@
 <!-- Select2 -->
 <link href="<?= base_url("vendors/select2/dist/css/select2.min.css") ?>" rel="stylesheet">
 
+<!-- Switchery -->
+<link href="<?= base_url("vendors/switchery/dist/switchery.min.css") ?>" rel="stylesheet">
+
 <!-- bootstrap-progressbar -->
 <link href="<?= base_url("vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css") ?>" rel="stylesheet">
 

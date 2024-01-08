@@ -23,8 +23,27 @@ class Penilaian_Alternatif extends CI_Controller {
 	}
 
 	public function index() {
-        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_where(['tahun_penilaian' => date('Y')])->result_array();
-        $alternatifs           = $this->m_alternatif->get_join_all()->result_array();
+        $tahun_penilaian = $this->input->get('tahun_penilaian', TRUE);
+        $tahun_penilaian = ($tahun_penilaian) ?? date('Y');
+
+        $data['tahun_penilaian']             = $tahun_penilaian;
+        $data['tahun_penilaian_alternatifs'] = array();
+
+        // masukkan data tahun untuk filter data yang ditampilkan by tahun
+        $i = 0;
+        for ($tahun = date('Y'); $tahun >= 2000; $tahun--) {
+            $data['tahun_penilaian_alternatifs'][$i]['tahun'] = $tahun;
+            $data['tahun_penilaian_alternatifs'][$i]['jumlah_data'] = $this->m_penilaian_alternatif->get_count_penilaian_alternatif($tahun);
+            $i++;
+        }
+        
+        // data penilaian seluruh (alternatif, penilaian, kriteria, sub kriteria, dusun, rt)
+        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_where([
+            'tahun_penilaian' => $tahun_penilaian
+        ])->result_array();
+
+        // seluruh data alternatif untuk membandingkan/mendapatkan alternatif yang belum dinilai
+        $alternatifs = $this->m_alternatif->get_join_all()->result_array();
 
         // Create an associative array with 'alternatif_id' as the key
         $mergedArray = [];
@@ -45,21 +64,27 @@ class Penilaian_Alternatif extends CI_Controller {
             }
         }
 
-        $data['penilaian_alternatifs'] =$mergedArray;
-        
-        $kriterias              = $this->m_kriteria->get_all()->result();
-        $data['kriterias']      = $kriterias;
-        $kriteria_id_collection = '';
+        $data['penilaian_alternatifs'] = $mergedArray;
 
-        // Gabungkan seluruh kriteria_id menjadi satu string dipisahkan oleh koma (,)
-        foreach ($kriterias as $kriteria) {
-            $kriteria_id_collection .= $kriteria->id . ', '; 
+        // ambil kriteria_id berdasarkan alternatif yang telah dinilai (jika ada)
+        // atau kriteria yang saat ini aktif (jika tidak ada data penilaian alternatif)
+        if ($penilaian_alternatifs) {
+            $alternatif_id_tmp      = $penilaian_alternatifs[0]['alternatif_id'];
+            $tahun_penilaian_tmp    = $penilaian_alternatifs[0]['tahun_penilaian'];
+            $kriteria_id_collection = $this->get_all_kriteria_id_by_alternatif_id($alternatif_id_tmp, $tahun_penilaian_tmp);
+        } else {
+            $kriteria_id_collection = $this->get_all_kriteria_id_aktif();
         }
 
-        // Hapus koma dan spasi pada ujung string
-        $kriteria_id_collection = rtrim($kriteria_id_collection, ', ');
-        $where                  = "kriteria_id IN({$kriteria_id_collection})";
-        $data['sub_kriterias']  = $this->m_sub_kriteria->get_where($where)->result();
+        // Ambil kriteria berdasarkan id yang telah di-filter
+        $data['kriterias'] = $this->m_kriteria->get_where(
+            "id IN({$kriteria_id_collection})"
+        )->result();
+
+        // Ambil sub kriteria berdasarkan kriteria
+        $data['sub_kriterias']  = $this->m_sub_kriteria->get_where(
+            "kriteria_id IN({$kriteria_id_collection})"
+        )->result();
 
         // urutkan kriteria dan subnya secara ascending berdasarkan id (karena di model defaultnya desc)
         usort($data['kriterias'], fn($a, $b) => $a->id - $b->id);
@@ -69,12 +94,22 @@ class Penilaian_Alternatif extends CI_Controller {
 	}
 
     public function store() {
+        $tahun_penilaian = $this->input->post('xtahun_penilaian', TRUE);
+
+        // ambil data penilaian alternatif untuk menentukan kriteria (yang sudah ada atau yang statusnya aktif)
+        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_where([
+            'tahun_penilaian' => $tahun_penilaian
+        ])->row_array();
+        
         $alternatif_id = $this->input->post('xalternatif_id', TRUE);
-        $is_penilaian_alternatif_exists = $this->m_penilaian_alternatif->get_where(['alternatif_id' => $alternatif_id])->row();
+        $is_penilaian_alternatif_exists = $this->m_penilaian_alternatif->get_where([
+            'alternatif_id'   => $alternatif_id,
+            'tahun_penilaian' => $tahun_penilaian
+        ])->row();
 
         if ($is_penilaian_alternatif_exists) {
             $this->session->set_flashdata('msg', 'Alternatif sudah dinilai!');
-            redirect('admin/penilaian_alternatif');
+            redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         // Validasi input
@@ -85,21 +120,34 @@ class Penilaian_Alternatif extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect('admin/penilaian_alternatif');
+            redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         $this->db->trans_start();
 
-        // get semua kriteria aktif untuk menentukan value input kriteria dan subnya
+        // ambil kriteria_id berdasarkan alternatif yang telah dinilai (jika ada)
+        // atau kriteria yang saat ini aktif (jika tidak ada data penilaian alternatif)
+        if ($penilaian_alternatifs) {
+            $alternatif_id_tmp      = $penilaian_alternatifs['alternatif_id'];
+            $tahun_penilaian_tmp    = $penilaian_alternatifs['tahun_penilaian'];
+            $kriteria_id_collection = $this->get_all_kriteria_id_by_alternatif_id($alternatif_id_tmp, $tahun_penilaian_tmp);
+        } else {
+            $kriteria_id_collection = $this->get_all_kriteria_id_aktif();
+        }
+
+        // Ambil kriteria berdasarkan id yang telah di-filter
+        $kriterias = $this->m_kriteria->get_where(
+            "id IN({$kriteria_id_collection})"
+        )->result();
+
         // sort by id (desc) agar data di db ter-insert dengan rapi
-        $kriterias = $this->m_kriteria->get_where(['status_aktif' => '1'])->result();
         usort($kriterias, fn($a, $b) => $a->id - $b->id);
 
         // insert semua penilaian yang dipilih
         foreach($kriterias as $kriteria) {
             $this->m_penilaian_alternatif->insert([
                 'alternatif_id'   => $this->input->post('xalternatif_id', TRUE),
-                'tahun_penilaian' => $this->input->post('xtahun_penilaian', TRUE),
+                'tahun_penilaian' => $tahun_penilaian,
                 'kriteria_id'     => $this->input->post("xkriteria_id_{$kriteria->kode}", TRUE),
                 'sub_kriteria_id' => $this->input->post("xsub_kriteria_id_{$kriteria->kode}", TRUE),
             ]);
@@ -114,10 +162,12 @@ class Penilaian_Alternatif extends CI_Controller {
             $this->session->set_flashdata('msg', 'success');
         }
             
-        redirect('admin/penilaian_alternatif');
+        redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
     public function update() {
+        $tahun_penilaian = $this->input->post('xtahun_penilaian', TRUE);
+
         // Validasi input
         $rules = $this->m_penilaian_alternatif->rules();
         $this->form_validation->set_rules($rules);
@@ -126,24 +176,43 @@ class Penilaian_Alternatif extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect('admin/penilaian_alternatif');
+            redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         $this->db->trans_start();
 
-        // get semua kriteria aktif untuk menentukan jumlah update data
-        $kriterias = $this->m_kriteria->get_where(['status_aktif' => '1'])->result();
+        // ambil data penilaian alternatif untuk menentukan kriteria (yang sudah ada atau yang statusnya aktif)
+        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_where([
+            'tahun_penilaian' => $tahun_penilaian
+        ])->row_array();
+
+        // ambil kriteria_id berdasarkan alternatif yang telah dinilai (jika ada)
+        // atau kriteria yang saat ini aktif (jika tidak ada data penilaian alternatif)
+        if ($penilaian_alternatifs) {
+            $alternatif_id_tmp      = $penilaian_alternatifs['alternatif_id'];
+            $tahun_penilaian_tmp    = $penilaian_alternatifs['tahun_penilaian'];
+            $kriteria_id_collection = $this->get_all_kriteria_id_by_alternatif_id($alternatif_id_tmp, $tahun_penilaian_tmp);
+        } else {
+            $kriteria_id_collection = $this->get_all_kriteria_id_aktif();
+        }
+
+        // Ambil kriteria berdasarkan id yang telah di-filter
+        $kriterias = $this->m_kriteria->get_where(
+            "id IN({$kriteria_id_collection})"
+        )->result();
+
+        // sort by id (desc) agar data di db ter-insert dengan rapi
         usort($kriterias, fn($a, $b) => $a->id - $b->id);
 
         // insert semua penilaian yang dipilih
         foreach($kriterias as $kriteria) {
             $where = [
-                'alternatif_id' => $this->input->post('xalternatif_id', TRUE),
-                'kriteria_id'   => $this->input->post("xkriteria_id_{$kriteria->kode}", TRUE)
+                'alternatif_id'   => $this->input->post('xalternatif_id', TRUE),
+                'kriteria_id'     => $this->input->post("xkriteria_id_{$kriteria->kode}", TRUE),
+                'tahun_penilaian' => $tahun_penilaian
             ];
-
-            $this->m_penilaian_alternatif->update_where($where, [
-                'tahun_penilaian' => $this->input->post('xtahun_penilaian', TRUE),
+            
+            $update = $this->m_penilaian_alternatif->update_where($where, [
                 'sub_kriteria_id' => $this->input->post("xsub_kriteria_id_{$kriteria->kode}", TRUE),
             ]);
         }
@@ -157,27 +226,74 @@ class Penilaian_Alternatif extends CI_Controller {
             $this->session->set_flashdata('msg', 'success');
         }
             
-        redirect('admin/penilaian_alternatif');
+        redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
-    public function destroy($alternatif_id) {
+    public function destroy($alternatif_id, $tahun_penilaian) {
         $penilaian_alternatif = $this->m_penilaian_alternatif->get_where(['alternatif_id' => $alternatif_id])->row();
         
         if (!$penilaian_alternatif) {
             $this->session->set_flashdata('msg', "Penilaian alternatif tidak ditemukan!");
-            redirect('admin/penilaian_alternatif');
+            redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
         
         !$this->m_penilaian_alternatif->delete_where(['alternatif_id' => $penilaian_alternatif->alternatif_id])
             ? $this->session->set_flashdata('msg', 'error-other')
             : $this->session->set_flashdata('msg', 'success-hapus');
             
-        redirect('admin/penilaian_alternatif');
+        redirect("admin/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
     public function get_penilaian_alternatif() {
         $alternatif_id = $this->input->post('alternatif_id', TRUE);
         $data          = $this->m_penilaian_alternatif->get_join_all_penilaian_where(['a.id' => $alternatif_id])->result_array();
         echo json_encode($data);
+    }
+
+    /**
+     * Mendapatkan kriteria_id dari satu alternatif (by alternatif_id)
+     * 
+     * @param int $alternatif_id
+     * @return string - formatted kriteria_id untuk pemanggilan WHERE IN. Contoh: 1, 2, 3, 4
+     */
+    private function get_all_kriteria_id_by_alternatif_id($alternatif_id, $tahun_penilaian) {
+        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_penilaian_simple_where([
+            'b.alternatif_id'   => $alternatif_id,
+            'b.tahun_penilaian' => $tahun_penilaian
+        ])->result();
+
+        $kriteria_ids = array();
+
+        foreach($penilaian_alternatifs as $penilaian_alternatif) {
+            array_push($kriteria_ids, $penilaian_alternatif->kriteria_id);
+        }
+        
+        // Gabungkan seluruh kriteria_id menjadi satu string dipisahkan oleh koma (,)
+        $kriteria_id_collection = '';
+
+        foreach ($kriteria_ids as $kriteria_id) {
+            $kriteria_id_collection .= $kriteria_id . ', ';
+        }
+
+        // Hapus koma dan spasi pada ujung string
+        $kriteria_id_collection = rtrim($kriteria_id_collection, ', ');
+
+        // return $kriteria_id_collection;
+        return $kriteria_id_collection;
+    }
+
+    private function get_all_kriteria_id_aktif() {
+        $kriterias              = $this->m_kriteria->get_where(['status_aktif' => '1'])->result();
+        $kriteria_id_collection = '';
+
+        // Gabungkan seluruh kriteria_id menjadi satu string dipisahkan oleh koma (,)
+        foreach ($kriterias as $kriteria) {
+            $kriteria_id_collection .= $kriteria->id . ', '; 
+        }
+
+        // Hapus koma dan spasi pada ujung string
+        $kriteria_id_collection = rtrim($kriteria_id_collection, ', ');
+
+        return $kriteria_id_collection;
     }
 }

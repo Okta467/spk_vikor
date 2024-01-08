@@ -22,6 +22,9 @@
 <!-- iCheck -->
 <script src="<?= base_url("vendors/iCheck/icheck.min.js") ?>"></script>
 
+<!-- Switchery -->
+<script src="<?=base_url("vendors/switchery/dist/switchery.min.js") ?>"></script>
+
 <!-- Select2 -->
 <script src="<?= base_url("vendors/select2/dist/js/select2.full.min.js") ?>"></script>
 

@@ -68,6 +68,7 @@
                         <th>Nama</th>
                         <th>Atribut</th>
                         <th>Bobot</th>
+                        <th>Status Aktif</th>
                         <th>Daftar Sub Kriteria</th>
                         <th>Aksi</th>
                       </tr>
@@ -93,6 +94,7 @@
                             ?>
                           </td>
                           <td><?= $kriteria->bobot ?></td>
+                          <td><input type="checkbox" class="js-switch toggle_status_aktif_kriteria" data-kriteria_id="<?= $kriteria->id ?>" <?= $kriteria->status_aktif ? 'checked' : '' ?>></td>
                           <td>
                             <button class="btn btn-dark btn-sm toggle_modal_daftar_sub_kriteria" data-kriteria_id="<?= $kriteria->id ?>">
                               <i class="fa fa-list"></i> Detail
@@ -333,6 +335,25 @@
             });
 
             window.location = "<?= site_url('admin/kriteria/destroy/') ?>" + kriteria_id
+          }
+        });
+      });
+
+
+      $('.datatables').on('change', '.toggle_status_aktif_kriteria', function() {
+        const kriteria_id = $(this).data('kriteria_id');
+        console.log('uwaaaaaa')
+
+        $.ajax({
+          url: '<?= site_url('admin/kriteria/set_status_aktif') ?>',
+          type: 'POST',
+          data: {
+            kriteria_id
+          },
+          dataType: 'JSON',
+          success: function(data) {
+            if (data) console.log('Berhasil update set status kriteria!');
+            else console.log('Gagal update set status kriteria!');
           }
         });
       });

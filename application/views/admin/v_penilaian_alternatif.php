@@ -57,16 +57,22 @@
                     <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-end; width: 300px;">
                       <li style="width: 35%">Tahun Penilaian:</li>
                       <li style="width: 65%">
-                        <select name="xtahun_penilaian_panel" id="xtahun_penilaian_panel" class="form-control select2">
-                          <option value="">-- Pilih Tahun Penilaian --</option>
-                          <option value="2024" selected>2024</option>
+                        <form method="get" action="<?= site_url('admin/penilaian_alternatif/') ?>">
+                          <select name="tahun_penilaian" id="tahun_penilaian" class="form-control select2" onchange="this.form.submit()">
+                            <option value="">-- Pilih Tahun Penilaian --</option>
 
-                          <?php for ($tahun = date('Y')-1; $tahun >= 2000; $tahun--) : ?>
-
-                            <option value="<?= $tahun ?>"><?= $tahun ?></option>
-
-                          <?php endfor ?>
-                        </select>
+                            <?php
+                            foreach($tahun_penilaian_alternatifs as $tahun_penilaian_alternatif):
+                              $tahun              = $tahun_penilaian_alternatif['tahun'];
+                              $jumlah_data        = $tahun_penilaian_alternatif['jumlah_data'];
+                              $is_selected_option = $tahun == $tahun_penilaian ? 'selected' : '';
+                            ?>
+          
+                              <option value="<?= $tahun ?>" <?= $is_selected_option ?>><?= "{$tahun}" ?></option>
+          
+                            <?php endforeach ?>
+                          </select>
+                        </form>
                       </li>
                     </div>
                   </ul>
@@ -278,7 +284,7 @@
 
       $('.datatables').on('click', '.toggle_modal_penilaian', function() {
         const data_btn = $(this).data();
-        const tahun_penilaian = $('#xtahun_penilaian_panel').val();
+        const tahun_penilaian = $('#tahun_penilaian').val();
 
         $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Penilaian Baru');
         $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/penilaian_alternatif/store') ?>');
@@ -296,7 +302,7 @@
 
       $('.datatables').on('click', '.toggle_modal_edit', function() {
         const data_btn = $(this).data();
-        const tahun_penilaian = $('#xtahun_penilaian_panel').val();
+        const tahun_penilaian = $('#tahun_penilaian').val();
 
         $.ajax({
           url: '<?= site_url('admin/penilaian_alternatif/get_penilaian_alternatif') ?>',
@@ -333,6 +339,7 @@
 
       $('.datatables').on('click', '.toggle_swal_hapus', function() {
         const alternatif_id = $(this).data('alternatif_id')
+        const tahun_penilaian = $('#tahun_penilaian').val();
 
         Swal.fire({
           title: "Hapus Data?",
@@ -350,7 +357,7 @@
               icon: "success"
             });
 
-            window.location = "<?= site_url('admin/penilaian_alternatif/destroy/') ?>" + alternatif_id
+            window.location = `<?= site_url('admin/penilaian_alternatif/destroy/') ?>` + `${alternatif_id}/${tahun_penilaian}`
           }
         });
       });

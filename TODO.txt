@@ -3,10 +3,11 @@
    -- teks pada pop up (poin 1)
    -- klik tombol edit nilai untuk melihat data yang sudah dinilai
 [X] 3. halaman penilaian default data diambil berdasarkan tahun sekarang
-4. Halaman hitung penilaian
+[X] 4. Halaman hitung penilaian
    -- pilih tahun terlebih dahulu, baru proses
    -- pop up jika ada yang belum dinilai (konfirmasi hitung)
-5. Tambah CRUD kolom kode_alternatif untuk tbl_alternatif
+   -- MY_SOLVE --> ada default tahun, tampilkan berdasarkan tahun tanpa konfirmasi
+[X] 5. Tambah CRUD kolom kode_alternatif untuk tbl_alternatif
 6. penilaian_alternatif
    -- radio di modal penilaian, ambil kriteria dari alternatif, tahun penilaian tersebut
    -- get kriteria where IN (semua kriteria dari alternatif tersebut)
@@ -17,3 +18,5 @@
 // temp
 - set object key nilai_s and nilai_r for penilaian_alternatif_simple
 - this is to check vikor index for alternative ranking
+
+// 

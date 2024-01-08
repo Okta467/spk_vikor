@@ -67,6 +67,14 @@ class M_penilaian_alternatif extends CI_Model {
 		return $this->db->order_by('id', 'DESC')->get_where($this->_table, $where);
 	}
 
+	public function get_count_penilaian_alternatif($tahun_penilaian) {
+		return $this->db
+			->from($this->_table)
+			->where('tahun_penilaian', $tahun_penilaian)
+			->group_by('alternatif_id')
+			->count_all_results();
+	}
+
     /*
     SELECT a.*, b.*, c.*, d.*
     FROM tbl_alternatif AS a
