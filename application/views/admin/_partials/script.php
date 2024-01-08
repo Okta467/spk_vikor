@@ -23,7 +23,7 @@
 <script src="<?= base_url("vendors/iCheck/icheck.min.js") ?>"></script>
 
 <!-- Switchery -->
-<script src="<?=base_url("vendors/switchery/dist/switchery.min.js") ?>"></script>
+<script src="<?= base_url("vendors/switchery/dist/switchery.min.js") ?>"></script>
 
 <!-- Select2 -->
 <script src="<?= base_url("vendors/select2/dist/js/select2.full.min.js") ?>"></script>
@@ -69,6 +69,17 @@
 
 <!-- Toggle Fullscreen on Sidebar Button -->
 <script>
+  const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+
+  var pageContent = document.querySelector('.nav-md .container.body .right_col');
+
+  // Fix gantellela content-height bug with many data (row) in datatables
+  document.addEventListener("DOMContentLoaded", function() {
+    pageContent.style.cssText = `min-height: ${vh}px !important`;
+    console.log(`min-height: ${vh}px !important`)
+  });
+  
+  
   document.getElementById('toggle_fullscreen').addEventListener('click', function() {
     toggle_fullscreen();
   });
