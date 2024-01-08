@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Rt extends CI_Controller {
-    const CURRENT_ACCESS_LEVEL = 'kepala_desa';
+class Dusun extends CI_Controller {
+    const CURRENT_ACCESS_LEVEL = 'kasi_kesejahteraan_sosial';
 
     public function __construct() {
         parent::__construct();
@@ -19,8 +19,13 @@ class Rt extends CI_Controller {
 
 	public function index() {
 		$data['dusuns'] = $this->m_dusun->get_all();
-		$data['rts']    = $this->m_rt->get_join_all();
 
-		$this->load->view('kepala_desa/v_rt', $data);
+		$this->load->view('kasi_kesejahteraan_sosial/v_dusun', $data);
+	}
+
+	public function get_all_rt() {
+		$dusun_id = $this->input->post('dusun_id', TRUE);
+		$data     = $this->m_dusun->get_join_all_where(['b.dusun_id' => $dusun_id])->result_array();
+		echo json_encode($data);
 	}
 } 
