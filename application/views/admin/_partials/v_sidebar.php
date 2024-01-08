@@ -1,7 +1,12 @@
+<?php
+$user_tmp = $this->m_auth->current_user();
+$formatted_hak_akses = ucwords(preg_replace('/_+/', ' ', $user_tmp->hak_akses)); // replace all underscore with space
+?>
+
 <div class="col-md-3 left_col menu_fixed">
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-      <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span><?= $this->config->config['sidebarTitle'] ?></span></a>
+      <a href="<?= site_url('admin') ?>" class="site_title"><i class="fa fa-paw"></i> <span><?= $this->config->config['sidebarTitle'] ?></span></a>
     </div>
 
     <div class="clearfix"></div>
@@ -9,11 +14,15 @@
     <!-- menu profile quick info -->
     <div class="profile clearfix">
       <div class="profile_pic">
-        <img src="<?= base_url("assets/images/img.jpg") ?>" alt="..." class="img-circle profile_img">
+        <a href="<?= site_url('admin/profile') ?>">
+          <img src="<?= base_url("assets/images/img.jpg") ?>" alt="..." class="img-circle profile_img">
+        </a>
       </div>
       <div class="profile_info">
         <span>Selamat datang,</span>
-        <h2>Admin</h2>
+        <a href="<?= site_url('admin/profile') ?>">
+          <h2><?= $formatted_hak_akses ?></h2>
+        </a>
       </div>
     </div>
     <!-- /menu profile quick info -->
