@@ -30,6 +30,12 @@ class M_user extends CI_Model {
 				'rules'  => 'integer' . $rt_id_is_required,
 			],
 			[
+				'field'  => 'xnama_pemilik',
+				'label'  => 'Nama Pemilik User',
+				'rules'  => 'required|max_length[255]|regex_match[/^[\sA-Za-z]*$/]',
+				'errors' => array('regex_match' => '{field} hanya boleh huruf dan spasi.')
+			],
+			[
 				'field'  => 'xusername',
 				'label'  => 'Username',
 				'rules'  => 'required|max_length[32]|alpha_numeric' . $username_is_unique,
@@ -38,22 +44,44 @@ class M_user extends CI_Model {
 			[
 				'field' => 'xpassword',
 				'label' => 'Password',
-				'rules' => 'max_length[255]' . $password_is_required,
+				'rules' => 'min_length[6]|max_length[255]' . $password_is_required,
+				'errors' => array('min_length' => 'Password Baru minimal 6 karakter.')
 			],
 			[
-				'field' => 'xhak_akses',
-				'label' => 'Hak Akses',
-				'rules' => 'required|max_length[20]|regex_match[/^(admin|kepala_desa|sekretaris_desa|bendahara_desa|kasi_kesejahteraan_sosial|kepala_dusun|ketua_rt)+$/]',
+				'field'  => 'xhak_akses',
+				'label'  => 'Hak Akses',
+				'rules'  => 'required|max_length[20]|regex_match[/^(admin|kepala_desa|sekretaris_desa|bendahara_desa|kasi_kesejahteraan_sosial|kepala_dusun|ketua_rt)+$/]',
 				'errors' => array('regex_match' => '{field} hanya boleh berupa admin, kepala_desa, sekretaris_desa, bendahara_desa, kasi_kesejahteraan_sosial, kepala_dusun, ketua_rt.')
 			],
 		];
+	}
+
+	// Rules to update profile details only in profile page for all roles
+	public function rules_update_details($password_is_required = true) {
+		$password_is_required = $password_is_required ? '|required' : '';
+		
+		return [
+			[
+				'field'  => 'xnama_pemilik',
+				'label'  => 'Nama Pemilik User',
+				'rules'  => 'required|max_length[255]|regex_match[/^[\sA-Za-z]*$/]',
+				'errors' => array('regex_match' => '{field} hanya boleh huruf dan spasi.')
+			],
+			[
+				'field' => 'xcurrent_password',
+				'label' => 'Password Saat Ini',
+				'rules' => 'min_length[6]|max_length[255]' . $password_is_required,
+				'errors' => array('min_length' => 'Password Baru minimal 6 karakter.')
+			],
+		];
+
 	}
 
 	// Rules to update password only in profile page for all roles
 	public function rules_update_password() {
 		return [
 			[
-				'field' => 'xcur_password',
+				'field' => 'xcurrent_password',
 				'label' => 'Password Sekarang',
 				'rules' => 'required|min_length[6]|max_length[255]',
 				'errors' => array('min_length' => 'Password Sekarang minimal 6 karakter.')
