@@ -19,6 +19,7 @@ class Penilaian_Alternatif extends CI_Controller {
 		$this->load->model('m_penilaian_alternatif');
 		$this->load->model('m_dusun');
 		$this->load->model('m_rt');
+		$this->load->model('m_user');
 		$this->load->helper('formatting_validation_errors');
 	}
 
@@ -36,14 +37,22 @@ class Penilaian_Alternatif extends CI_Controller {
             $data['tahun_penilaian_alternatifs'][$i]['jumlah_data'] = $this->m_penilaian_alternatif->get_count_penilaian_alternatif($tahun);
             $i++;
         }
+
+        // untuk filter data alternatif berdasarkan dusun dan rt saat ini
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $dusun_id               = $current_user_full_info->dusun_id;
         
         // data penilaian seluruh (alternatif, penilaian, kriteria, sub kriteria, dusun, rt)
         $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_where([
-            'tahun_penilaian' => $tahun_penilaian
+            'tahun_penilaian' => $tahun_penilaian,
+            'e.id'            => $dusun_id,
         ])->result_array();
 
         // seluruh data alternatif untuk membandingkan/mendapatkan alternatif yang belum dinilai
-        $alternatifs = $this->m_alternatif->get_join_all()->result_array();
+        $alternatifs = $this->m_alternatif->get_join_all_where([
+            'b.id' => $dusun_id,
+        ])->result_array();
 
         // Create an associative array with 'alternatif_id' as the key
         $mergedArray = [];

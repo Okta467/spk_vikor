@@ -15,12 +15,24 @@ class Alternatif extends CI_Controller {
 		$this->load->model('m_alternatif');
 		$this->load->model('m_dusun');
 		$this->load->model('m_rt');
+		$this->load->model('m_user');
 		$this->load->helper('formatting_validation_errors');
 	}
 
 	public function index() {
-		$data['alternatifs'] = $this->m_alternatif->get_join_all();
-		$data['dusuns']      = $this->m_dusun->get_all();
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $dusun_id               = $current_user_full_info->dusun_id;
+        $dusun                  = $current_user_full_info->dusun;
+
+        $data['user_dusun_id'] = $dusun_id;
+        $data['user_dusun']    = $dusun;
+
+		$data['alternatifs'] = $this->m_alternatif->get_join_all_where([
+            'b.id' => $dusun_id,
+        ]);
+
+		$data['rts'] = $this->m_rt->get_where(['dusun_id' => $dusun_id])->result();
 
 		$this->load->view('kepala_dusun/v_alternatif', $data);
 	}
@@ -38,6 +50,16 @@ class Alternatif extends CI_Controller {
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
             redirect('kepala_dusun/alternatif');
+        }
+
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $user_dusun_id          = $current_user_full_info->dusun_id;
+        $input_dusun_id         = $this->input->post('xdusun_id', TRUE);
+
+        if ($input_dusun_id !== $user_dusun_id) {
+            $this->session->set_flashdata('msg', 'Dusun tidak sama dengan user saat ini!');
+            redirect('ketua_rt/alternatif');
         }
 
         $insert = $this->m_alternatif->insert([
@@ -72,6 +94,16 @@ class Alternatif extends CI_Controller {
             redirect('kepala_dusun/alternatif');
         }
 
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $user_dusun_id          = $current_user_full_info->dusun_id;
+        $input_dusun_id         = $this->input->post('xdusun_id', TRUE);
+
+        if ($input_dusun_id !== $user_dusun_id) {
+            $this->session->set_flashdata('msg', 'Dusun tidak sama dengan user saat ini!');
+            redirect('ketua_rt/alternatif');
+        }
+
         $data_update_alternatif = [
             'dusun_id'             => $this->input->post('xdusun_id', TRUE),
             'rt_id'                => $this->input->post('xrt_id', TRUE),
@@ -95,6 +127,15 @@ class Alternatif extends CI_Controller {
         if (!$alternatif) {
             $this->session->set_flashdata('msg', 'Alternatif tidak ditemukan!');
             redirect('kepala_dusun/alternatif');
+        }
+
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $user_dusun_id          = $current_user_full_info->dusun_id;
+
+        if ($alternatif->dusun_id !== $user_dusun_id) {
+            $this->session->set_flashdata('msg', 'Dusun tidak sama dengan user saat ini!');
+            redirect('ketua_rt/alternatif');
         }
         
         !$this->m_alternatif->delete($alternatif_id)

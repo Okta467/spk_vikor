@@ -149,18 +149,11 @@
               <label for="xkode">Kode Alternatif</label>
               <input type="text" name="xkode" id="xkode" class="form-control" placeholder="AXX" required>
             </div>
-
+            
             <div class="form-group col-md-6 col-sm-12 col-xs-12">
               <label for="xdusun_id">Dusun</label>
               <select name="xdusun_id" id="xdusun_id" class="form-control select2">
-                <option value="">-- Pilih --</option>
-
-                <?php foreach ($dusuns->result() as $dusun) : ?>
-
-                  <option value="<?= $dusun->id ?>"><?= $dusun->nama ?></option>
-
-                <?php endforeach; ?>
-
+                <option value="<?= $user_dusun_id ?>" selected="selected"><?= $user_dusun ?></option>
               </select>
             </div>
 
@@ -168,8 +161,14 @@
               <label for="xrt_id">RT</label>
               <select name="xrt_id" id="xrt_id" class="form-control select2">
                 <option value="">-- Pilih --</option>
+
+                <?php foreach($rts as $rt): ?>
+
+                  <option value="<?= $rt->id ?>"><?= $rt->nama ?></option>
+
+                <?php endforeach ?>
+
               </select>
-              <small class="text-danger">*) Pilih dusun terlebih dahulu.</small>
             </div>
 
             <div class="form-group col-md-6 col-sm-12 col-xs-12">
@@ -246,24 +245,11 @@
             
             $('#xalternatif_id').val(data.alternatif_id);
             $('#xkode').val(data.kode_alternatif);
-            $('#xdusun_id').val(data.dusun_id).select().trigger('change');
+            $('#xrt_id').val(data.rt_id).select().trigger('change');
             $('#xkk_kepala_keluarga').val(data.kk_kepala_keluarga);
             $('#xnik_kepala_keluarga').val(data.nik_kepala_keluarga);
             $('#xnama_kepala_keluarga').val(data.nama_kepala_keluarga);
             $('#xalamat_alternatif').val(data.alamat_alternatif);
-
-            // I know this sometimes work, and not, but idk how to fix it
-            $.ajax({
-              url: '<?= site_url('kepala_dusun/alternatif/get_alternatif_by_id') ?>',
-              type: 'POST',
-              data: {
-                alternatif_id
-              },
-              dataType: 'JSON',
-              success: function(data) {
-                $('#xrt_id').val(data.rt_id).select().trigger('change');
-              }
-            });
 
             $('#modal_tambah_dan_edit').modal('show');
           }
