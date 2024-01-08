@@ -4,7 +4,7 @@
 <head>
   <title><?= "Dashboard - {$this->config->config["webTitle"]}" ?></title>
 
-  <?php $this->load->view('admin/_partials/head') ?>
+  <?php $this->load->view('sekretaris_desa/_partials/head') ?>
 </head>
 
 <body class="nav-md">
@@ -13,13 +13,13 @@
 
       <!--============================== SIDEBAR ==============================-->
       <?php
-      $this->load->view('admin/_partials/v_sidebar');
+      $this->load->view('sekretaris_desa/_partials/v_sidebar');
       ?>
       <!--//END SIDEBAR -->
 
       <!--============================== HEADER ==============================-->
       <?php
-      $this->load->view('admin/_partials/v_header');
+      $this->load->view('sekretaris_desa/_partials/v_header');
       ?>
       <!--//END SIDEBAR -->
 
@@ -43,7 +43,7 @@
           </div>
 
           <div class="clearfix"></div>
-
+          
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
@@ -68,7 +68,7 @@
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
       <!--//END CONTENT -->
@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <?php $this->load->view('admin/_partials/script') ?>
+  <?php $this->load->view('sekretaris_desa/_partials/script') ?>
 
 </body>
 
