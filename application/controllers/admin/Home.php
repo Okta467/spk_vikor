@@ -14,6 +14,11 @@ class Home extends CI_Controller {
     }
 
 	public function index() {
-		$this->load->view('admin/v_dashboard');
+        $user                 = $this->m_auth->current_user();
+        $data['user']         = $user;
+        $data['nama_pemilik'] = ucwords($user->nama_pemilik);
+        $data['hak_akses']    = ucwords(preg_replace('/_+/', ' ', $user->hak_akses)); // replace all underscore with space
+
+		$this->load->view('admin/v_dashboard', $data);
 	}
 }
