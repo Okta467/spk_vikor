@@ -4,7 +4,7 @@
 <head>
   <title><?= "Data Kriteria - {$this->config->config["webTitle"]}" ?></title>
 
-  <?php $this->load->view('bendahara_desa/_partials/head') ?>
+  <?php $this->load->view('kepala_desa/_partials/head') ?>
 </head>
 
 <body class="nav-md">
@@ -14,13 +14,13 @@
 
       <!--============================== SIDEBAR ==============================-->
       <?php
-      $this->load->view('bendahara_desa/_partials/v_sidebar');
+      $this->load->view('kepala_desa/_partials/v_sidebar');
       ?>
       <!--//END SIDEBAR -->
 
       <!--============================== HEADER ==============================-->
       <?php
-      $this->load->view('bendahara_desa/_partials/v_header');
+      $this->load->view('kepala_desa/_partials/v_header');
       ?>
       <!--//END SIDEBAR -->
 
@@ -83,6 +83,9 @@
               <div class="x_panel">
                 <div class="x_title">
                   <h2><i class="fa fa-pencil-square-o"></i> Data Kriteria</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <button class="btn btn-primary btn-sm toggle_modal_tambah"><i class="fa fa-plus"></i> Tambah Data</button>
+                  </ul>
                   <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -97,6 +100,7 @@
                         <th>Bobot</th>
                         <th>Status Aktif</th>
                         <th>Daftar Sub Kriteria</th>
+                        <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -120,13 +124,24 @@
                             ?>
                           </td>
                           <td><?= $kriteria->bobot ?></td>
-                          <td>
-                            <input type="checkbox" class="js-switch" disabled <?= $kriteria->status_aktif ? 'checked' : '' ?>>
-                          </td>
+                          <td><input type="checkbox" class="js-switch toggle_status_aktif_kriteria" data-kriteria_id="<?= $kriteria->id ?>" <?= $kriteria->status_aktif ? 'checked' : '' ?>></td>
                           <td>
                             <button class="btn btn-dark btn-sm toggle_modal_daftar_sub_kriteria" data-kriteria_id="<?= $kriteria->id ?>">
                               <i class="fa fa-list"></i> Detail
                             </button>
+                          </td>
+                          <td>
+                            <div class="form-button-action">
+                              <!-- Toggle Modal Hapus -->
+                              <span class="toggle_swal_hapus" data-kriteria_id="<?= $kriteria->id ?>">
+                                <button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fa fa-times"></i></button>
+                              </span>
+
+                              <!-- Toggle Modal Edit -->
+                              <span class="toggle_modal_edit" data-kriteria_id="<?= $kriteria->id ?>">
+                                <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></button>
+                              </span>
+                            </div>
                           </td>
                         </tr>
 
@@ -147,7 +162,7 @@
 
       <!--============================== FOOTER ==============================-->
       <?php
-      $this->load->view('bendahara_desa/_partials/v_footer');
+      $this->load->view('kepala_desa/_partials/v_footer');
       ?>
       <!--//END FOOTER -->
 
@@ -187,7 +202,58 @@
   </div>
   <!--//END DAFTAR RT -->
 
-  <?php $this->load->view('bendahara_desa/_partials/script') ?>
+  <!--============================== MODAL TAMBAH/EDIT ==============================-->
+  <div class="modal fade" id="modal_tambah_dan_edit" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel2">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <form method="post" class="form-horizontal form-label-left" id="xform_modal_tambah_dan_edit">
+
+            <!-- For updating data -->
+            <input type="hidden" name="xkriteria_id" id="xkriteria_id">
+
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label for="xkode">Kode</label>
+              <input type="text" name="xkode" id="xkode" class="form-control" placeholder="CXX" required>
+            </div>
+
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label for="xatribut">Atribut</label>
+              <select name="xatribut" id="xatribut" class="form-control select2">
+                <option value="">-- Pilih --</option>
+                <option value="benefit">Benefit</option>
+                <option value="cost">Cost</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+              <label for="xnama">Nama Kriteria</label>
+              <input required class="form-control" id="xnama" name="xnama" type="text">
+            </div>
+
+            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+              <label for="xbobot">Bobot</label>
+              <input type="number" step="any" name="xbobot" id="xbobot" class="form-control" placeholder="xx.xxxxxx" required>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary" id="toggle_swal_submit">Simpan</button>
+        </div>
+        </form>
+        <!--/.form -->
+      </div>
+    </div>
+  </div>
+  <!--//END TAMBAH/EDIT -->
+
+  <?php $this->load->view('kepala_desa/_partials/script') ?>
 
   <script>
     $(document).ready(function() {
@@ -209,12 +275,16 @@
         ]
       });
 
+      $('.select2').select2({
+        width: '100%'
+      });
+
 
       $('.datatables').on('click', '.toggle_modal_daftar_sub_kriteria', function() {
         const kriteria_id = $(this).data('kriteria_id');
 
         $.ajax({
-          url: '<?= site_url('bendahara_desa/kriteria/get_all_sub_kriteria') ?>',
+          url: '<?= site_url('kepala_desa/kriteria/get_all_sub_kriteria') ?>',
           type: 'POST',
           data: {
             kriteria_id
@@ -239,13 +309,122 @@
           }
         })
       });
+
+
+      $('.toggle_modal_tambah').on('click', function() {
+        $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-plus"></i> Tambah Data');
+        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/kriteria/store') ?>');
+        $('#modal_tambah_dan_edit').modal('show');
+      });
+
+
+      $('.datatables').on('click', '.toggle_modal_edit', function() {
+        const kriteria_id = $(this).data('kriteria_id');
+
+        $.ajax({
+          url: '<?= site_url('kepala_desa/kriteria/get_kriteria_by_id') ?>',
+          type: 'POST',
+          data: {
+            kriteria_id
+          },
+          dataType: 'JSON',
+          success: function(data) {
+            $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Edit Data');
+            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/kriteria/update') ?>');
+
+            $('#xkriteria_id').val(data.id);
+            $('#xkode').val(data.kode);
+            $('#xatribut').select().val(data.atribut).trigger('change');
+            $('#xnama').val(data.nama);
+            $('#xbobot').val(data.bobot);
+
+            $('#modal_tambah_dan_edit').modal('show');
+          }
+        })
+      });
+
+
+      $('.datatables').on('click', '.toggle_swal_hapus', function() {
+        const kriteria_id = $(this).data('kriteria_id')
+
+        Swal.fire({
+          title: "Hapus Data?",
+          text: "Tindakan tidak dapat diubah kembali!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, konfirmasi!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Tindakan dikonfirmasi!",
+              icon: "success"
+            });
+
+            window.location = "<?= site_url('kepala_desa/kriteria/destroy/') ?>" + kriteria_id
+          }
+        });
+      });
+
+
+      $('.datatables').on('change', '.toggle_status_aktif_kriteria', function() {
+        const kriteria_id = $(this).data('kriteria_id');
+        console.log('uwaaaaaa')
+
+        $.ajax({
+          url: '<?= site_url('kepala_desa/kriteria/set_status_aktif') ?>',
+          type: 'POST',
+          data: {
+            kriteria_id
+          },
+          dataType: 'JSON',
+          success: function(data) {
+            if (data) console.log('Berhasil update set status kriteria!');
+            else console.log('Gagal update set status kriteria!');
+          }
+        });
+      });
+
+
+      // Simpan penilaian confirmation sweetalert
+      $('#toggle_swal_submit').on('click', function(e) {
+        e.preventDefault();
+        var form = $(this).parents('.modal-content').find('form');
+
+        // Validate form before showing sweetalert
+        if (!form[0].checkValidity()) {
+          form[0].reportValidity();
+        } else {
+          Swal.fire({
+            title: "Konfirmasi Tindakan??",
+            text: "Harap perhatikan kembali input sebelum submit.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, konfirmasi!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Success!",
+                text: "Tindakan dikonfirmasi!",
+                icon: "success"
+              });
+
+              form.submit();
+            }
+          });
+        }
+      });
     })
   </script>
 
 
   <!--============================== NOTIFY ==============================-->
   <?php
-  $this->load->view('bendahara_desa/_partials/notify');
+  $this->load->view('kepala_desa/_partials/notify');
   ?>
   <!--//END NOTIFY -->
 
