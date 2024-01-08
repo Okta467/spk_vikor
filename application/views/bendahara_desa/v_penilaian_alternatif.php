@@ -207,46 +207,48 @@
           <h4 class="modal-title" id="myModalLabel2">Modal title</h4>
         </div>
         <div class="modal-body">
+          <div class="row">
 
-          <div class="form-group col-md-12 col-sm-12 col-xs-12">
-            <h4><i class="fa fa-user-md"></i> Info Alternatif</h4>
-            <p><b>Nama</b>: <span id="xnama_kepala_keluarga"></span></p>
-            <p><b>Dusun</b>: <span id="xdusun"></span></p>
-            <p><b>RT</b>: <span id="xrt"></span></p>
-            <p class="text-danger" style="margin-top: 1.5em;">
-              <i class="fa fa-bullhorn"></i> <strong>Perhatian!</strong>
-              <br>Perubahan pada penilaian ini tidak akan mengubah apa pun (hanya tampilan saja)
-            </p>
-          </div>
-
-          <?php foreach ($kriterias as $kriteria) : ?>
-
-            <div class="form-group col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 1.5em">
-
-              <input type="hidden" name="<?= "xkriteria_id_{$kriteria->kode}" ?>" value="<?= $kriteria->id ?>" class="xkriteria_id">
-
-              <label><?= "{$kriteria->kode} - {$kriteria->nama}" ?></label>
-
-              <?php
-              foreach ($sub_kriterias as $sub_kriteria) :
-                if ($sub_kriteria->kriteria_id === $kriteria->id) :
-              ?>
-
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="<?= "xsub_kriteria_id_{$kriteria->kode}" ?>" value="<?= $sub_kriteria->id ?>" class="flat xsub_kriteria" required> <?= $sub_kriteria->nama ?>
-                  </label>
-                </div>
-
-              <?php
-                endif;
-              endforeach
-              ?>
-
+            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+              <h4><i class="fa fa-user-md"></i> Info Alternatif</h4>
+              <p><b>Nama</b>: <span id="xnama_kepala_keluarga"></span></p>
+              <p><b>Dusun</b>: <span id="xdusun"></span></p>
+              <p><b>RT</b>: <span id="xrt"></span></p>
+              <p class="text-danger" style="margin-top: 1.5em;">
+                <i class="fa fa-bullhorn"></i> <strong>Perhatian!</strong>
+                <br>Perubahan pada penilaian ini tidak akan mengubah apa pun (hanya tampilan saja)
+              </p>
             </div>
 
-          <?php endforeach ?>
+            <?php foreach ($kriterias as $kriteria) : ?>
 
+              <div class="form-group col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 1.5em">
+
+                <input type="hidden" name="<?= "xkriteria_id_{$kriteria->kode}" ?>" value="<?= $kriteria->id ?>" class="xkriteria_id">
+
+                <label><?= "{$kriteria->kode} - {$kriteria->nama}" ?></label>
+
+                <?php
+                foreach ($sub_kriterias as $sub_kriteria) :
+                  if ($sub_kriteria->kriteria_id === $kriteria->id) :
+                ?>
+
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="<?= "xsub_kriteria_id_{$kriteria->kode}" ?>" value="<?= $sub_kriteria->id ?>" class="flat xsub_kriteria" required> <?= $sub_kriteria->nama ?>
+                    </label>
+                  </div>
+
+                <?php
+                  endif;
+                endforeach
+                ?>
+
+              </div>
+
+            <?php endforeach ?>
+
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
