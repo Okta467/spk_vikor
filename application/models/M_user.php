@@ -50,7 +50,7 @@ class M_user extends CI_Model {
 			[
 				'field'  => 'xhak_akses',
 				'label'  => 'Hak Akses',
-				'rules'  => 'required|max_length[20]|regex_match[/^(admin|kepala_desa|sekretaris_desa|bendahara_desa|kasi_kesejahteraan_sosial|kepala_dusun|ketua_rt)+$/]',
+				'rules'  => 'required|regex_match[/^(admin|kepala_desa|sekretaris_desa|bendahara_desa|kasi_kesejahteraan_sosial|kepala_dusun|ketua_rt)+$/]',
 				'errors' => array('regex_match' => '{field} hanya boleh berupa admin, kepala_desa, sekretaris_desa, bendahara_desa, kasi_kesejahteraan_sosial, kepala_dusun, ketua_rt.')
 			],
 		];
