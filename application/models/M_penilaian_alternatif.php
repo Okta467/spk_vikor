@@ -104,7 +104,7 @@ class M_penilaian_alternatif extends CI_Model {
             ->join('tbl_kriteria AS c', 'c.id = b.kriteria_id', 'LEFT')
 			->join('tbl_sub_kriteria AS d', 'c.id = d.kriteria_id', 'LEFT')
 			->join('tbl_dusun AS e', 'e.id = a.dusun_id', 'LEFT')
-			->join('tbl_rt AS f', 'e.id = f.dusun_id', 'LEFT')
+			->join('tbl_rt AS f', 'f.id = a.rt_id', 'LEFT')
 			->group_by('a.id')
 			->order_by('a.id', 'DESC')
 			->get();
@@ -118,7 +118,7 @@ class M_penilaian_alternatif extends CI_Model {
             ->join('tbl_kriteria AS c', 'c.id = b.kriteria_id', 'LEFT')
 			->join('tbl_sub_kriteria AS d', 'c.id = d.kriteria_id', 'LEFT')
 			->join('tbl_dusun AS e', 'e.id = a.dusun_id', 'LEFT')
-			->join('tbl_rt AS f', 'e.id = f.dusun_id', 'LEFT')
+			->join('tbl_rt AS f', 'f.id = a.rt_id', 'LEFT')
             ->where($where)
 			->group_by('a.id')
 			->order_by('a.id', 'DESC')
