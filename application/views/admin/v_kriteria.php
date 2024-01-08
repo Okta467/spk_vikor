@@ -48,6 +48,36 @@
 
           <div class="clearfix"></div>
 
+          <!--============================== INGFO ==============================-->
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2><i class="fa fa-bullhorn"></i> Perhatian!</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li class="dropdown" style="visibility: hidden">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    </li>
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+          
+                  <ol type="1" style="margin: 0; padding: 0 15px">
+                    <li>Jika pada tahun x (misalnya 2024) <strong>sudah pernah menilai alternatif</strong>, maka kriteria mengikuti <strong>kriteria yang dinilai sebelumnya</strong>.</li>
+                    <li>Lalu, pada tahun y (misalnya 2023) <strong>belum ada alternatif yang dinilai</strong>, maka kriteria mengikuti <strong>kriteria yang statusnya aktif</strong> saat ini.</li>
+                  </ol>
+          
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--//END INGFO -->
+
+          <div class="clearfix"></div>
+            
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="x_panel">
@@ -229,7 +259,6 @@
     $(document).ready(function() {
       // Datatables initialise
       $('.datatables').DataTable({
-        fixedHeader: true,
         pageLength: 5,
         lengthMenu: [
           [3, 5, 10, 25, 50, 100],
