@@ -36,8 +36,6 @@ class Alternatif extends CI_Controller {
             'b.id' => $dusun_id,
             'c.id' => $rt_id
         ]);
-        
-		$data['dusuns'] = $this->m_dusun->get_all();
 
 		$this->load->view('ketua_rt/v_alternatif', $data);
 	}
@@ -141,6 +139,19 @@ class Alternatif extends CI_Controller {
         
         if (!$alternatif) {
             $this->session->set_flashdata('msg', 'Alternatif tidak ditemukan!');
+            redirect('ketua_rt/alternatif');
+        }
+
+		$current_user           = $this->m_auth->current_user();
+        $current_user_full_info = $this->m_user->get_join_all_where(['a.id' => $current_user->id])->row();
+        $user_dusun_id          = $current_user_full_info->dusun_id;
+        $user_rt_id             = $current_user_full_info->rt_id;
+
+        if (
+            $alternatif->dusun_id !== $user_dusun_id 
+            || !$alternatif->rt_id !== $user_rt_id
+        ) {
+            $this->session->set_flashdata('msg', 'Dusun atau RT tidak sama dengan user saat ini!');
             redirect('ketua_rt/alternatif');
         }
         
