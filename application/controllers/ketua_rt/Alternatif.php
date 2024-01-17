@@ -64,7 +64,7 @@ class Alternatif extends CI_Controller {
 
         if (
             $input_dusun_id !== $user_dusun_id 
-            || !$input_rt_id !== $user_rt_id
+            || $input_rt_id !== $user_rt_id
         ) {
             $this->session->set_flashdata('msg', 'Dusun atau RT tidak sama dengan user saat ini!');
             redirect('ketua_rt/alternatif');
@@ -111,7 +111,7 @@ class Alternatif extends CI_Controller {
 
         if (
             $input_dusun_id !== $user_dusun_id 
-            || !$input_rt_id !== $user_rt_id
+            || $input_rt_id !== $user_rt_id
         ) {
             $this->session->set_flashdata('msg', 'Dusun atau RT tidak sama dengan user saat ini!');
             redirect('ketua_rt/alternatif');
