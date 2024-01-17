@@ -44,12 +44,12 @@ $formatted_hak_akses = ucwords(preg_replace('/_+/', ' ', $user_tmp->hak_akses));
           <li><a href="<?= site_url('admin') ?>"><i class="fa fa-home"></i> Dashboard </a></li>
           <li><a href="<?= site_url('kasi_kesejahteraan_sosial/alternatif') ?>"><i class="fa fa-user-md"></i> Data Alternatif </a></li>
           <li><a href="<?= site_url('kasi_kesejahteraan_sosial/kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Kriteria </a></li>
-          <li><a href="<?= site_url('kasi_kesejahteraan_sosial/sub_kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Sub-Kriteria </a></li>
+          <li><a href="<?= site_url('kasi_kesejahteraan_sosial/Sub_Kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Sub-Kriteria </a></li>
           <li <?= $is_penilaian_alternatif_selected ?>>
-            <a href="<?= site_url('kasi_kesejahteraan_sosial/penilaian_alternatif/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a>
+            <a href="<?= site_url('kasi_kesejahteraan_sosial/Penilaian_Alternatif/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a>
           </li>
           <li <?= $is_hasil_perhitungan_selected ?>>
-            <a href="<?= site_url('kasi_kesejahteraan_sosial/hasil_perhitungan/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a>
+            <a href="<?= site_url('kasi_kesejahteraan_sosial/Hasil_Perhitungan/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a>
           </li>
           <li><a href="<?= site_url('kasi_kesejahteraan_sosial/dusun') ?>"><i class="fa fa-building-o"></i> Data Dusun </a></li>
           <li><a href="<?= site_url('kasi_kesejahteraan_sosial/rt') ?>"><i class="fa fa-road"></i> Data RT </a></li>

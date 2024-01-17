@@ -59,7 +59,7 @@
                          Tahun Penilaian:
                       </li>
                       <li style="width: 60%">
-                        <form method="get" action="<?= site_url('kasi_kesejahteraan_sosial/hasil_perhitungan/') ?>">
+                        <form method="get" action="<?= site_url('kasi_kesejahteraan_sosial/Hasil_Perhitungan/') ?>">
                           <select name="tahun_penilaian" id="tahun_penilaian" class="form-control select2" onchange="this.form.submit()">
                             <option value="">-- Pilih Tahun Penilaian --</option>
 
@@ -90,7 +90,7 @@
                     </div>
                     
                     <div class="col-md-6 col-sm-12 col-xs-12">
-                      <a href="<?= site_url("kasi_kesejahteraan_sosial/hasil_perhitungan/print/?tahun_penilaian={$tahun_penilaian}") ?>" target="_blank" class="btn btn-primary" style="width: 100%">
+                      <a href="<?= site_url("kasi_kesejahteraan_sosial/Hasil_Perhitungan/print/?tahun_penilaian={$tahun_penilaian}") ?>" target="_blank" class="btn btn-primary" style="width: 100%">
                         <i class="fa fa-print"></i> Cetak Data Perhitungan
                       </a>
                     </div>
@@ -635,7 +635,7 @@
                          Tahun Penilaian:
                       </li>
                       <li style="width: 60%">
-                        <form method="get" action="<?= site_url('kasi_kesejahteraan_sosial/hasil_perhitungan') ?>">
+                        <form method="get" action="<?= site_url('kasi_kesejahteraan_sosial/Hasil_Perhitungan') ?>">
                           <select name="tahun_penilaian" id="tahun_penilaian" class="form-control select2" onchange="this.form.submit()">
                             <option value="">-- Pilih Tahun Penilaian --</option>
 
@@ -666,7 +666,7 @@
                     </div>
                     
                     <div class="col-md-6 col-sm-12 col-xs-12">
-                      <a href="<?= site_url("kasi_kesejahteraan_sosial/hasil_perhitungan/print/?tahun_penilaian={$tahun_penilaian}") ?>" target="_blank" class="btn btn-primary" style="width: 100%">
+                      <a href="<?= site_url("kasi_kesejahteraan_sosial/Hasil_Perhitungan/print/?tahun_penilaian={$tahun_penilaian}") ?>" target="_blank" class="btn btn-primary" style="width: 100%">
                         <i class="fa fa-print"></i> Cetak Data Perhitungan
                       </a>
                     </div>

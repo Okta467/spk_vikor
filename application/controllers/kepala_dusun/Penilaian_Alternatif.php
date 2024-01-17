@@ -118,7 +118,7 @@ class Penilaian_Alternatif extends CI_Controller {
 
         if ($is_penilaian_alternatif_exists) {
             $this->session->set_flashdata('msg', 'Alternatif sudah dinilai!');
-            redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+            redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         // Validasi input
@@ -129,7 +129,7 @@ class Penilaian_Alternatif extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+            redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         $this->db->trans_start();
@@ -171,7 +171,7 @@ class Penilaian_Alternatif extends CI_Controller {
             $this->session->set_flashdata('msg', 'success');
         }
             
-        redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+        redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
     public function update() {
@@ -185,7 +185,7 @@ class Penilaian_Alternatif extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+            redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
 
         $this->db->trans_start();
@@ -235,7 +235,7 @@ class Penilaian_Alternatif extends CI_Controller {
             $this->session->set_flashdata('msg', 'success');
         }
             
-        redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+        redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
     public function destroy($alternatif_id, $tahun_penilaian) {
@@ -243,14 +243,14 @@ class Penilaian_Alternatif extends CI_Controller {
         
         if (!$penilaian_alternatif) {
             $this->session->set_flashdata('msg', "Penilaian alternatif tidak ditemukan!");
-            redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+            redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
         }
         
         !$this->m_penilaian_alternatif->delete_where(['alternatif_id' => $penilaian_alternatif->alternatif_id])
             ? $this->session->set_flashdata('msg', 'error-other')
             : $this->session->set_flashdata('msg', 'success-hapus');
             
-        redirect("kepala_dusun/penilaian_alternatif/?tahun_penilaian={$tahun_penilaian}");
+        redirect("kepala_dusun/Penilaian_Alternatif/?tahun_penilaian={$tahun_penilaian}");
     }
 
     public function get_penilaian_alternatif() {

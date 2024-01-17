@@ -44,12 +44,12 @@ $formatted_hak_akses = ucwords(preg_replace('/_+/', ' ', $user_tmp->hak_akses));
           <li><a href="<?= site_url('kepala_dusun') ?>"><i class="fa fa-home"></i> Dashboard </a></li>
           <li><a href="<?= site_url('kepala_dusun/alternatif') ?>"><i class="fa fa-user-md"></i> Data Alternatif </a></li>
           <li><a href="<?= site_url('kepala_dusun/kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Kriteria </a></li>
-          <li><a href="<?= site_url('kepala_dusun/sub_kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Sub-Kriteria </a></li>
+          <li><a href="<?= site_url('kepala_dusun/Sub_Kriteria') ?>"><i class="fa fa-pencil-square-o"></i> Data Sub-Kriteria </a></li>
           <li <?= $is_penilaian_alternatif_selected ?>>
-            <a href="<?= site_url('kepala_dusun/penilaian_alternatif/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a>
+            <a href="<?= site_url('kepala_dusun/Penilaian_Alternatif/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-bar-chart"></i> Data Nilai </a>
           </li>
           <li <?= $is_hasil_perhitungan_selected ?>>
-            <a href="<?= site_url('kepala_dusun/hasil_perhitungan/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a>
+            <a href="<?= site_url('kepala_dusun/Hasil_Perhitungan/?tahun_penilaian=' . date('Y')) ?>"><i class="fa fa-list-alt"></i> Data Hasil Perhitungan </a>
           </li>
           <li><a href="<?= site_url('kepala_dusun/dusun') ?>"><i class="fa fa-building-o"></i> Data Dusun </a></li>
           <li><a href="<?= site_url('kepala_dusun/rt') ?>"><i class="fa fa-road"></i> Data RT </a></li>

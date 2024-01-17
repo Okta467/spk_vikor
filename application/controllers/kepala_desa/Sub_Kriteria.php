@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Sub_kriteria extends CI_Controller {
+class Sub_Kriteria extends CI_Controller {
     const CURRENT_ACCESS_LEVEL = 'kepala_desa';
 
     public function __construct() {
@@ -34,7 +34,7 @@ class Sub_kriteria extends CI_Controller {
         // Cek ketersediaan nama sub kriteria pada kriteria yang dipilih
         if ($is_sub_kriteria_exists) {
             $this->session->set_flashdata('msg', "Nama Sub Kriteria <b>{$nama_sub_kriteria}</b> sudah ada untuk <b>{$nama_kriteria}</b>!");
-            redirect('kepala_desa/sub_kriteria');
+            redirect('kepala_desa/Sub_Kriteria');
         }
 
         // Validasi input
@@ -45,7 +45,7 @@ class Sub_kriteria extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect('kepala_desa/sub_kriteria');
+            redirect('kepala_desa/Sub_Kriteria');
         }
 
         $insert = $this->m_sub_kriteria->insert([
@@ -59,7 +59,7 @@ class Sub_kriteria extends CI_Controller {
             ? $this->session->set_flashdata('msg', 'error-other')
             : $this->session->set_flashdata('msg', 'success');
             
-        redirect('kepala_desa/sub_kriteria');
+        redirect('kepala_desa/Sub_Kriteria');
     }
 
     public function update() {
@@ -77,7 +77,7 @@ class Sub_kriteria extends CI_Controller {
             // Cek ketersediaan nama sub kriteria pada kriteria yang dipilih
             if ($is_nama_sub_kriteria_exists) {
                 $this->session->set_flashdata('msg', "Nama Sub Kriteria <b>{$nama_sub_kriteria}</b> sudah ada untuk kriteria <b>{$nama_kriteria}</b>!");
-                redirect('kepala_desa/sub_kriteria');
+                redirect('kepala_desa/Sub_Kriteria');
             }
         }
 
@@ -89,7 +89,7 @@ class Sub_kriteria extends CI_Controller {
             $error = validation_errors(' ', ' ');
             $error = formatting_validation_errors($error);
             $this->session->set_flashdata('msg', $error);
-            redirect('kepala_desa/sub_kriteria');
+            redirect('kepala_desa/Sub_Kriteria');
         }
 
         $data_update_sub_kriteria = [
@@ -103,7 +103,7 @@ class Sub_kriteria extends CI_Controller {
             ? $this->session->set_flashdata('msg', 'error-other')
             : $this->session->set_flashdata('msg', 'success');
 
-        redirect('kepala_desa/sub_kriteria');
+        redirect('kepala_desa/Sub_Kriteria');
     }
 
     public function destroy($sub_kriteria_id) {
@@ -111,14 +111,14 @@ class Sub_kriteria extends CI_Controller {
         
         if (!$sub_kriteria) {
             $this->session->set_flashdata('msg', 'Sub Kriteria tidak ditemukan!');
-            redirect('kepala_desa/sub_kriteria');
+            redirect('kepala_desa/Sub_Kriteria');
         }
 
         !$this->m_sub_kriteria->delete($sub_kriteria_id)
             ? $this->session->set_flashdata('msg', 'error-other')
             : $this->session->set_flashdata('msg', 'success-hapus');
 
-        redirect('kepala_desa/sub_kriteria');
+        redirect('kepala_desa/Sub_Kriteria');
     }
 
     public function get_sub_kriteria_by_id() {

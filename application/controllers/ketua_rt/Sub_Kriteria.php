@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Sub_kriteria extends CI_Controller {
+class Sub_Kriteria extends CI_Controller {
     const CURRENT_ACCESS_LEVEL = 'ketua_rt';
 
     public function __construct() {

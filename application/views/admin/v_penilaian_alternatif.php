@@ -87,7 +87,7 @@
                     <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-end; width: 300px;">
                       <li style="width: 35%">Tahun Penilaian:</li>
                       <li style="width: 65%">
-                        <form method="get" action="<?= site_url('admin/penilaian_alternatif/') ?>">
+                        <form method="get" action="<?= site_url('admin/Penilaian_Alternatif/') ?>">
                           <select name="tahun_penilaian" id="tahun_penilaian" class="form-control select2" onchange="this.form.submit()">
                             <option value="">-- Pilih Tahun Penilaian --</option>
 
@@ -239,7 +239,7 @@
           <h4 class="modal-title" id="myModalLabel2">Modal title</h4>
         </div>
         <div class="modal-body">
-          <form method="post" class="form-horizontal form-label-left" id="xform_modal_tambah_dan_edit" action="<?= site_url('admin/penilaian_alternatif/store') ?>">
+          <form method="post" class="form-horizontal form-label-left" id="xform_modal_tambah_dan_edit" action="<?= site_url('admin/Penilaian_Alternatif/store') ?>">
 
             <!-- For updating/referencing data -->
             <input type="hidden" name="xpenilaian_alternatif_id" id="xpenilaian_alternatif_id">
@@ -317,7 +317,7 @@
         const tahun_penilaian = $('#tahun_penilaian').val();
 
         $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Penilaian Baru');
-        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/penilaian_alternatif/store') ?>');
+        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/Penilaian_Alternatif/store') ?>');
         $('input[type="radio"]').iCheck('uncheck');
 
         $('#xalternatif_id').val(data_btn.alternatif_id);
@@ -335,7 +335,7 @@
         const tahun_penilaian = $('#tahun_penilaian').val();
 
         $.ajax({
-          url: '<?= site_url('admin/penilaian_alternatif/get_penilaian_alternatif') ?>',
+          url: '<?= site_url('admin/Penilaian_Alternatif/get_penilaian_alternatif') ?>',
           type: 'POST',
           data: {
             alternatif_id: data_btn.alternatif_id
@@ -343,7 +343,7 @@
           dataType: 'JSON',
           success: function(data) {
             $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Edit Data');
-            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/penilaian_alternatif/update') ?>');
+            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('admin/Penilaian_Alternatif/update') ?>');
 
             $('#xpenilaian_alternatif_id').val(data_btn.penilaian_alternatif_id);
             $('#xalternatif_id').val(data_btn.alternatif_id);
@@ -387,7 +387,7 @@
               icon: "success"
             });
 
-            window.location = `<?= site_url('admin/penilaian_alternatif/destroy/') ?>` + `${alternatif_id}/${tahun_penilaian}`
+            window.location = `<?= site_url('admin/Penilaian_Alternatif/destroy/') ?>` + `${alternatif_id}/${tahun_penilaian}`
           }
         });
       });

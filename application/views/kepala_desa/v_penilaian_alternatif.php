@@ -87,7 +87,7 @@
                     <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-end; width: 300px;">
                       <li style="width: 35%">Tahun Penilaian:</li>
                       <li style="width: 65%">
-                        <form method="get" action="<?= site_url('kepala_desa/penilaian_alternatif/') ?>">
+                        <form method="get" action="<?= site_url('kepala_desa/Penilaian_Alternatif/') ?>">
                           <select name="tahun_penilaian" id="tahun_penilaian" class="form-control select2" onchange="this.form.submit()">
                             <option value="">-- Pilih Tahun Penilaian --</option>
 
@@ -284,7 +284,7 @@
         const tahun_penilaian = $('#tahun_penilaian').val();
 
         $.ajax({
-          url: '<?= site_url('kepala_desa/penilaian_alternatif/get_penilaian_alternatif') ?>',
+          url: '<?= site_url('kepala_desa/Penilaian_Alternatif/get_penilaian_alternatif') ?>',
           type: 'POST',
           data: {
             alternatif_id: data_btn.alternatif_id

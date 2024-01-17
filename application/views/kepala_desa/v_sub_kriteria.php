@@ -213,7 +213,7 @@
 
       $('.toggle_modal_tambah').on('click', function() {
         $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-plus"></i> Tambah Data');
-        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/sub_kriteria/store') ?>');
+        $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/Sub_Kriteria/store') ?>');
         $('#modal_tambah_dan_edit').modal('show');
       });
 
@@ -222,7 +222,7 @@
         const sub_kriteria_id = $(this).data('sub_kriteria_id');
 
         $.ajax({
-          url: '<?= site_url('kepala_desa/sub_kriteria/get_sub_kriteria_by_id') ?>',
+          url: '<?= site_url('kepala_desa/Sub_Kriteria/get_sub_kriteria_by_id') ?>',
           type: 'POST',
           data: {
             sub_kriteria_id
@@ -230,7 +230,7 @@
           dataType: 'JSON',
           success: function(data) {
             $('#modal_tambah_dan_edit .modal-title').html('<i class="fa fa-pencil-square-o"></i> Edit Data');
-            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/sub_kriteria/update') ?>');
+            $('#xform_modal_tambah_dan_edit').attr('action', '<?= site_url('kepala_desa/Sub_Kriteria/update') ?>');
 
             $('#xsub_kriteria_id').val(data.id);
             $('#xkriteria_id').val(data.kriteria_id).select().trigger('change');
@@ -263,7 +263,7 @@
               icon: "success"
             });
 
-            window.location = "<?= site_url('kepala_desa/sub_kriteria/destroy/') ?>" + sub_kriteria_id
+            window.location = "<?= site_url('kepala_desa/Sub_Kriteria/destroy/') ?>" + sub_kriteria_id
           }
         });
       });
