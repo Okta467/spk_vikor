@@ -20,6 +20,19 @@
 8. Validate penilaian alternatif for Ketua RT and Kepala Dusun
    -- check input dusun_id compared to user dusun_id for Kepala Dusun
    -- check input dusun_id and rt_id compared to user dusun_id and rt_i for Ketua RT
+9. Update created_at and updated_at in database
+   -- fix default for created to current_timestampt()
+   -- fix on update for updated_at to current_timestamp()
+19. fix M_alternatif
+    -- error msg for "xkk_kepala_keluarga" and "xnik_kepala_keluarga"
+    -- current --> 'is_unique' => 'Nama role sudah ada.'
+    -- to --> {field} sudah ada
+11. Fix halaman penilaian
+    -- set GET value (address bar) to default (current year) if tahun penilaian is empty
+12. Fix M_user
+    -- error msg for 'xcurrent_password' in rules_update_details()
+    -- current --> 'Password Baru minimal 6 karakter.'
+    -- to --> 'Password harus minimal 6 karakter.'
 
 
 // temp
