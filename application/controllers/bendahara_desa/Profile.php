@@ -40,7 +40,7 @@ class Profile extends CI_Controller {
         }
 
         $user            = $this->m_auth->current_user();
-        $password        = $this->input->post('xcur_password', TRUE);
+        $password        = $this->input->post('xcurrent_password', TRUE);
         $new_password    = $this->input->post('xnew_password', TRUE);
         $retype_password = $this->input->post('xnew_password2', TRUE);
 
