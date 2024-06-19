@@ -174,10 +174,20 @@
                             $max_skor_kriteria = $max_skor_kriterias->{$kriteria->kode};
                             $min_skor_kriteria = $min_skor_kriterias->{$kriteria->kode};
                             $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
-    
-                            $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
-                              ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
-                              : 0;
+
+                            if ($kriteria->atribut === 'benefit'):
+
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
+                                : 0;
+                                
+                            elseif ($kriteria->atribut === 'cost'):
+
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
+                                : 0;
+
+                            endif;
     
                             echo $hasil_normalisasi_nilai;
                             ?>
