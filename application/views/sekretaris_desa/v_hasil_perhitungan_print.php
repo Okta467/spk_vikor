@@ -4,7 +4,7 @@
 <head>
   <title><?= "Data Hasil Perhitungan - {$this->config->config["webTitle"]}" ?></title>
 
-  <?php $this->load->view('admin/_partials/head') ?>
+  <?php $this->load->view('sekretaris_desa/_partials/head') ?>
 </head>
 
 <body class="nav-md">
@@ -28,6 +28,8 @@
     </div>
     <!--//END KOP -->
     
+    <div class="clearfix"></div>
+    
     <!--============================== PENILAIAN ALTERNATIF ==============================-->
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -38,7 +40,7 @@
           </div>
           <div class="x_content">
     
-            <table class="table table-striped table-bordered table_responsive jambo_table">
+            <table class="table table-striped table-bordered jambo_table">
               <thead>
                 <tr>
                   <th rowspan="2">#</th>
@@ -121,7 +123,7 @@
           </div>
           <div class="x_content">
     
-            <table class="table table-striped table-bordered table_responsive jambo_table">
+            <table class="table table-striped table-bordered jambo_table">
               <thead>
                 <tr>
                   <th rowspan="2">#</th>
@@ -174,19 +176,19 @@
                             $max_skor_kriteria = $max_skor_kriterias->{$kriteria->kode};
                             $min_skor_kriteria = $min_skor_kriterias->{$kriteria->kode};
                             $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
-
+    
                             if ($kriteria->atribut === 'benefit'):
-
+    
                               $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
                                 ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
                                 : 0;
                                 
                             elseif ($kriteria->atribut === 'cost'):
-
+    
                               $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
                                 ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
                                 : 0;
-
+    
                             endif;
     
                             echo $hasil_normalisasi_nilai;
@@ -226,7 +228,7 @@
           </div>
           <div class="x_content">
     
-            <table class="table table-striped table-bordered table_responsive jambo_table">
+            <table class="table table-striped table-bordered jambo_table">
               <thead>
                 <tr>
                   <th rowspan="2">#</th>
@@ -280,9 +282,19 @@
                             $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
                             $bobot_kriteria    = $penilaian_alternatif_simple->bobot_kriteria;
     
-                            $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0
-                              ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria)
-                              : 0;
+                            if ($kriteria->atribut === 'benefit'):
+    
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
+                                : 0;
+                                
+                            elseif ($kriteria->atribut === 'cost'):
+    
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
+                                : 0;
+    
+                            endif;
     
                             $terbobot = $hasil_normalisasi_nilai * $bobot_kriteria;
     
@@ -322,7 +334,7 @@
           </div>
           <div class="x_content">
     
-            <table class="table table-striped table-bordered table_responsive jambo_table">
+            <table class="table table-striped table-bordered jambo_table">
               <thead>
                 <tr>
                   <th rowspan="2">#</th>
@@ -349,7 +361,7 @@
                 ?>
     
                   <tr>
-                    <td><?= $no++ ?></td>
+                    <td><?= $no ?></td>
                     <td><?= $penilaian_alternatif->kode_alternatif ?></td>
                     <td><?= $penilaian_alternatif->nama_kepala_keluarga ?></td>
     
@@ -371,16 +383,26 @@
                             $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
                             $bobot_kriteria    = $penilaian_alternatif_simple->bobot_kriteria;
     
-                            $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0
-                              ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria)
-                              : 0;
+                            if ($kriteria->atribut === 'benefit'):
+    
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
+                                : 0;
+                                
+                            elseif ($kriteria->atribut === 'cost'):
+    
+                              $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
+                                : 0;
+    
+                            endif;
     
                             $terbobot = $hasil_normalisasi_nilai * $bobot_kriteria;
     
                             // masukkan entri terbobot ke array untuk perhitungan nilai S dan R
-                            !isset($terbobot_collection)
-                              ? $terbobot_collection = array($terbobot)
-                              : array_push($terbobot_collection, $terbobot);
+                            !isset($terbobot_collection[$no])
+                              ? $terbobot_collection[$no] = array($terbobot)
+                              : array_push($terbobot_collection[$no], $terbobot);
     
                             echo number_format($terbobot, 4, '.', ',');
                             ?>
@@ -397,7 +419,7 @@
                     <!-- NILAI S DAN R -->
                     <td>
                       <?php
-                      $nilai_s = array_sum($terbobot_collection);
+                      $nilai_s = array_sum($terbobot_collection[$no]);
     
                       // masukkan nilai_s ke penilaian alternatif untuk menentukan nilai vikor
                       $penilaian_alternatif->nilai_s = $nilai_s;
@@ -412,7 +434,7 @@
                     </td>
                     <td>
                       <?php
-                      $nilai_r = max($terbobot_collection);
+                      $nilai_r = max($terbobot_collection[$no]);
     
                       // masukkan nilai_r ke penilaian alternatif untuk menentukan nilai vikor
                       $penilaian_alternatif->nilai_r = $nilai_r;
@@ -427,6 +449,7 @@
                     </td>
                   </tr>
     
+                <?php $no++ ?>
                 <?php endforeach ?>
     
               </tbody>
@@ -510,7 +533,7 @@
             }
             ?>
     
-            <table class="table table-striped table-bordered table_responsive jambo_table">
+            <table class="table table-striped table-bordered jambo_table">
               <thead>
                 <tr>
                   <th>#</th>
@@ -556,7 +579,7 @@
   </div>
   <!--//END CONTAINER -->
 
-  <?php $this->load->view('admin/_partials/script') ?>
+  <?php $this->load->view('sekretaris_desa/_partials/script') ?>
 
   <script>
     $(document).ready(function() {
@@ -581,7 +604,7 @@
 
   <!--============================== NOTIFY ==============================-->
   <?php
-  $this->load->view('admin/_partials/notify');
+  $this->load->view('sekretaris_desa/_partials/notify');
   ?>
   <!--//END NOTIFY -->
 

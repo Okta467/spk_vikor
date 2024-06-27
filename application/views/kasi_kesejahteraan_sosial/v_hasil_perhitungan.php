@@ -356,10 +356,20 @@
                                   $min_skor_kriteria = $min_skor_kriterias->{$kriteria->kode};
                                   $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
                                   $bobot_kriteria    = $penilaian_alternatif_simple->bobot_kriteria;
-          
-                                  $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0
-                                    ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria)
-                                    : 0;
+
+                                  if ($kriteria->atribut === 'benefit'):
+
+                                    $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                      ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
+                                      : 0;
+                                      
+                                  elseif ($kriteria->atribut === 'cost'):
+
+                                    $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                      ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
+                                      : 0;
+
+                                  endif;
           
                                   $terbobot = $hasil_normalisasi_nilai * $bobot_kriteria;
           
@@ -426,7 +436,7 @@
                       ?>
           
                         <tr>
-                          <td><?= $no++ ?></td>
+                          <td><?= $no ?></td>
                           <td><?= $penilaian_alternatif->kode_alternatif ?></td>
                           <td><?= $penilaian_alternatif->nama_kepala_keluarga ?></td>
           
@@ -447,17 +457,27 @@
                                   $min_skor_kriteria = $min_skor_kriterias->{$kriteria->kode};
                                   $nilai_alternatif  = $penilaian_alternatif_simple->skor_sub_kriteria;
                                   $bobot_kriteria    = $penilaian_alternatif_simple->bobot_kriteria;
-          
-                                  $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0
-                                    ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria)
-                                    : 0;
+
+                                  if ($kriteria->atribut === 'benefit'):
+
+                                    $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                      ? ($max_skor_kriteria - $nilai_alternatif) / ($max_skor_kriteria - $min_skor_kriteria) 
+                                      : 0;
+                                      
+                                  elseif ($kriteria->atribut === 'cost'):
+
+                                    $hasil_normalisasi_nilai = ($max_skor_kriteria - $min_skor_kriteria) !== 0 
+                                      ? ($min_skor_kriteria - $nilai_alternatif) / ($min_skor_kriteria - $max_skor_kriteria)
+                                      : 0;
+
+                                  endif;
           
                                   $terbobot = $hasil_normalisasi_nilai * $bobot_kriteria;
           
                                   // masukkan entri terbobot ke array untuk perhitungan nilai S dan R
-                                  !isset($terbobot_collection)
-                                    ? $terbobot_collection = array($terbobot)
-                                    : array_push($terbobot_collection, $terbobot);
+                                  !isset($terbobot_collection[$no])
+                                    ? $terbobot_collection[$no] = array($terbobot)
+                                    : array_push($terbobot_collection[$no], $terbobot);
           
                                   echo number_format($terbobot, 4, '.', ',');
                                   ?>
@@ -474,7 +494,7 @@
                           <!-- NILAI S DAN R -->
                           <td>
                             <?php
-                            $nilai_s = array_sum($terbobot_collection);
+                            $nilai_s = array_sum($terbobot_collection[$no]);
           
                             // masukkan nilai_s ke penilaian alternatif untuk menentukan nilai vikor
                             $penilaian_alternatif->nilai_s = $nilai_s;
@@ -489,7 +509,7 @@
                           </td>
                           <td>
                             <?php
-                            $nilai_r = max($terbobot_collection);
+                            $nilai_r = max($terbobot_collection[$no]);
           
                             // masukkan nilai_r ke penilaian alternatif untuk menentukan nilai vikor
                             $penilaian_alternatif->nilai_r = $nilai_r;
@@ -504,6 +524,7 @@
                           </td>
                         </tr>
           
+                      <?php $no++ ?>
                       <?php endforeach ?>
           
                     </tbody>
