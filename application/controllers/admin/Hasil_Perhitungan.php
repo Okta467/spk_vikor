@@ -104,9 +104,11 @@ class Hasil_Perhitungan extends CI_Controller {
         $data['tahun_penilaian'] = $tahun_penilaian;
 
         // data penilaian seluruh (alternatif, penilaian, kriteria, sub kriteria, dusun, rt)
-        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_where([
-            'tahun_penilaian' => $tahun_penilaian
-        ])->result();
+        $penilaian_alternatifs = $this->m_penilaian_alternatif->get_join_all_where(
+            ['tahun_penilaian' => $tahun_penilaian]
+            , 'a.kode'
+            , 'ASC'
+        )->result();
 
         // return data array kosong jika penilaian alternatif pada tahun x tidak ada
         if (!$penilaian_alternatifs) {

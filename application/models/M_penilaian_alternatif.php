@@ -110,7 +110,7 @@ class M_penilaian_alternatif extends CI_Model {
 			->get();
 	}
 
-	public function get_join_all_where($where) {
+	public function get_join_all_where($where, $order_by = 'a.id',  $order_by_direction = 'DESC') {
 		return $this->db
 			->select(self::SELECT_JOIN_ALL)
 			->from('tbl_alternatif AS a')
@@ -121,7 +121,7 @@ class M_penilaian_alternatif extends CI_Model {
 			->join('tbl_rt AS f', 'f.id = a.rt_id', 'LEFT')
             ->where($where)
 			->group_by('a.id')
-			->order_by('a.id', 'DESC')
+			->order_by($order_by, $order_by_direction)
             ->get();
 	}
 
